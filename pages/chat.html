@@ -3,381 +3,153 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>李白智能助手 - 智教诗途</title>
+    <title>太白智能体 - 智教诗途</title>
+    <meta name="description" content="与太白AI智能体对话，获得个性化的朗读指导和文学知识解析。">
     <link rel="stylesheet" href="../css/main.css">
-    <link rel="stylesheet" href="../css/components.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
-        .chat-container {
+        .chat-layout {
             display: flex;
-            height: calc(100vh - 70px);
-            margin-top: 70px;
+            height: calc(100vh - 80px);
+            margin-top: 80px;
         }
-        
+
+        /* --- Sidebar --- */
         .chat-sidebar {
             width: 300px;
-            background: var(--gray-50);
-            border-right: 1px solid var(--gray-200);
+            flex-shrink: 0;
+            background: var(--color-dark);
+            border-right: 1px solid var(--color-border);
             display: flex;
             flex-direction: column;
+            padding: 40px 28px;
+            gap: 32px;
+            overflow-y: auto;
         }
-        
-        .chat-header {
-            padding: var(--spacing-lg);
-            border-bottom: 1px solid var(--gray-200);
-            background: var(--white);
-        }
-        
-        .assistant-info {
+
+        .sidebar-header {
             display: flex;
             align-items: center;
-            gap: var(--spacing-md);
-            margin-bottom: var(--spacing-md);
+            gap: 16px;
         }
-        
-        .assistant-avatar {
-            width: 60px;
-            height: 60px;
-            background: var(--gradient-primary);
+
+        .sidebar-avatar {
+            width: 52px;
+            height: 52px;
             border-radius: 50%;
+            background: linear-gradient(135deg, var(--color-electric), #0080ff);
             display: flex;
             align-items: center;
             justify-content: center;
-            color: var(--white);
-            font-size: 1.5rem;
-            font-weight: 600;
+            font-family: var(--font-serif);
+            font-size: 1.3rem;
+            font-weight: 400;
+            color: var(--color-black);
+            flex-shrink: 0;
         }
-        
-        .assistant-details h3 {
-            margin: 0;
-            color: var(--gray-900);
-            font-size: 1.125rem;
+
+        .sidebar-name {
+            font-family: var(--font-serif);
+            font-size: 1.2rem;
+            font-weight: 400;
+            letter-spacing: 0.03em;
         }
-        
-        .assistant-status {
-            color: var(--success-green);
-            font-size: 0.875rem;
+
+        .sidebar-status {
             display: flex;
             align-items: center;
-            gap: var(--spacing-xs);
+            gap: 6px;
+            font-size: 0.7rem;
+            color: var(--color-success);
+            margin-top: 4px;
         }
-        
+
         .status-dot {
-            width: 8px;
-            height: 8px;
-            background: var(--success-green);
+            width: 6px;
+            height: 6px;
             border-radius: 50%;
-            animation: pulse 2s infinite;
+            background: var(--color-success);
+            animation: statusPulse 2s infinite;
         }
-        
-        .chat-features {
-            padding: var(--spacing-lg);
+
+        @keyframes statusPulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
         }
-        
-        .feature-list {
+
+        .sidebar-section-title {
+            font-family: var(--font-sans);
+            font-size: 0.6rem;
+            letter-spacing: var(--tracking-widest);
+            text-transform: uppercase;
+            color: var(--color-text-muted);
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .capability-list {
             list-style: none;
             padding: 0;
             margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
         }
-        
-        .feature-item {
-            padding: var(--spacing-sm) 0;
-            color: var(--gray-600);
-            font-size: 0.875rem;
+
+        .capability-item {
             display: flex;
             align-items: center;
-            gap: var(--spacing-sm);
+            gap: 10px;
+            font-size: 0.8rem;
+            color: var(--color-text-secondary);
+            line-height: 1.5;
         }
-        
-        .feature-icon {
-            color: var(--primary-blue);
+
+        .capability-icon {
+            font-size: 0.9rem;
+            flex-shrink: 0;
+            width: 20px;
+            text-align: center;
         }
-        
-        .quick-questions {
-            padding: var(--spacing-lg);
-            border-top: 1px solid var(--gray-200);
-        }
-        
-        .quick-questions h4 {
-            margin: 0 0 var(--spacing-md) 0;
-            color: var(--gray-700);
-            font-size: 0.875rem;
-            font-weight: 600;
-        }
-        
-        .question-btn {
-            display: block;
-            width: 100%;
-            padding: var(--spacing-sm) var(--spacing-md);
-            margin-bottom: var(--spacing-sm);
-            background: var(--white);
-            border: 1px solid var(--gray-200);
-            border-radius: var(--radius-md);
-            color: var(--gray-700);
-            text-align: left;
-            cursor: pointer;
-            transition: var(--transition-fast);
-            font-size: 0.875rem;
-        }
-        
-        .question-btn:hover {
-            border-color: var(--primary-blue);
-            background: rgba(99, 102, 241, 0.05);
-        }
-        
+
+        /* --- Chat Main Area --- */
         .chat-main {
             flex: 1;
             display: flex;
             flex-direction: column;
-            background: var(--white);
-        }
-        
-        .chat-messages {
-            flex: 1;
-            padding: var(--spacing-lg);
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: var(--spacing-lg);
-        }
-        
-        .message {
-            display: flex;
-            gap: var(--spacing-md);
-            max-width: 80%;
-        }
-        
-        .message.user {
-            align-self: flex-end;
-            flex-direction: row-reverse;
-        }
-        
-        .message-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 600;
-            flex-shrink: 0;
-        }
-        
-        .message.assistant .message-avatar {
-            background: var(--gradient-primary);
-            color: var(--white);
-        }
-        
-        .message.user .message-avatar {
-            background: var(--gray-200);
-            color: var(--gray-700);
-        }
-        
-        .message-content {
-            flex: 1;
-        }
-        
-        .message-bubble {
-            padding: var(--spacing-md) var(--spacing-lg);
-            border-radius: var(--radius-lg);
-            line-height: 1.6;
+            background: var(--color-black);
             position: relative;
+            overflow: hidden;
         }
-        
-        .message.assistant .message-bubble {
-            background: var(--gray-50);
-            color: var(--gray-800);
-            border-bottom-left-radius: var(--radius-sm);
-        }
-        
-        .message.user .message-bubble {
-            background: var(--primary-blue);
-            color: var(--white);
-            border-bottom-right-radius: var(--radius-sm);
-        }
-        
-        .message-time {
-            font-size: 0.75rem;
-            color: var(--gray-500);
-            margin-top: var(--spacing-xs);
-        }
-        
-        .message.user .message-time {
-            text-align: right;
-        }
-        
-        .typing-indicator {
-            display: flex;
-            align-items: center;
-            gap: var(--spacing-md);
-            padding: var(--spacing-lg);
-            opacity: 0;
-            transition: var(--transition-normal);
-        }
-        
-        .typing-indicator.show {
-            opacity: 1;
-        }
-        
-        .typing-dots {
-            display: flex;
-            gap: 4px;
-            padding: var(--spacing-md) var(--spacing-lg);
-            background: var(--gray-50);
-            border-radius: var(--radius-lg);
-        }
-        
-        .typing-dot {
-            width: 8px;
-            height: 8px;
-            background: var(--gray-400);
-            border-radius: 50%;
-            animation: typing 1.4s infinite ease-in-out;
-        }
-        
-        .typing-dot:nth-child(1) { animation-delay: -0.32s; }
-        .typing-dot:nth-child(2) { animation-delay: -0.16s; }
-        
-        @keyframes typing {
-            0%, 80%, 100% {
-                transform: scale(0.8);
-                opacity: 0.5;
-            }
-            40% {
-                transform: scale(1);
-                opacity: 1;
-            }
-        }
-        
-        .chat-input-area {
-            padding: var(--spacing-lg);
-            border-top: 1px solid var(--gray-200);
-            background: var(--white);
-        }
-        
-        .input-container {
-            display: flex;
-            gap: var(--spacing-md);
-            align-items: flex-end;
-        }
-        
-        .input-wrapper {
-            flex: 1;
-            position: relative;
-        }
-        
-        .chat-input {
+
+        .chat-main iframe {
             width: 100%;
-            min-height: 50px;
-            max-height: 120px;
-            padding: var(--spacing-md) var(--spacing-lg);
-            border: 2px solid var(--gray-200);
-            border-radius: var(--radius-lg);
-            font-size: 1rem;
-            line-height: 1.5;
-            resize: none;
-            transition: var(--transition-fast);
-            font-family: inherit;
-        }
-        
-        .chat-input:focus {
-            outline: none;
-            border-color: var(--primary-blue);
-            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
-        }
-        
-        .send-button {
-            width: 50px;
-            height: 50px;
-            background: var(--primary-blue);
-            color: var(--white);
+            flex: 1;
             border: none;
-            border-radius: 50%;
-            cursor: pointer;
-            transition: var(--transition-fast);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
+            background: var(--color-black);
         }
-        
-        .send-button:hover:not(:disabled) {
-            background: var(--primary-blue-dark);
-            transform: scale(1.05);
-        }
-        
-        .send-button:disabled {
-            background: var(--gray-300);
-            cursor: not-allowed;
-            transform: none;
-        }
-        
-        .welcome-message {
-            text-align: center;
-            padding: var(--spacing-3xl);
-            color: var(--gray-500);
-        }
-        
-        .welcome-icon {
-            font-size: 4rem;
-            margin-bottom: var(--spacing-lg);
-        }
-        
-        .welcome-title {
-            font-size: 1.5rem;
-            font-weight: 600;
-            color: var(--gray-700);
-            margin-bottom: var(--spacing-md);
-        }
-        
-        .welcome-description {
-            line-height: 1.6;
-            max-width: 400px;
-            margin: 0 auto;
-        }
-        
-        .error-message {
-            background: rgba(239, 68, 68, 0.1);
-            color: var(--error-red);
-            padding: var(--spacing-md);
-            border-radius: var(--radius-md);
-            margin: var(--spacing-md) 0;
-            border-left: 4px solid var(--error-red);
-        }
-        
-        /* 响应式设计 */
-        @media (max-width: 768px) {
-            .chat-container {
-                flex-direction: column;
-            }
-            
+
+        /* --- Responsive --- */
+        @media (max-width: 900px) {
             .chat-sidebar {
-                width: 100%;
-                height: auto;
-                max-height: 200px;
-                overflow-y: auto;
-            }
-            
-            .quick-questions {
                 display: none;
             }
-            
-            .message {
-                max-width: 90%;
+            .chat-layout {
+                margin-top: 70px;
+                height: calc(100vh - 70px);
             }
         }
     </style>
 </head>
 <body>
+
     <!-- 导航栏 -->
-    <nav class="navbar">
+    <nav class="navbar scrolled" id="navbar" style="mix-blend-mode:normal; background:rgba(3,3,3,0.95); border-bottom:1px solid var(--color-border);">
         <div class="nav-container">
             <div class="nav-brand">
-                <div class="logo">
-                    <span class="brand-text">智教诗途</span>
-                </div>
+                <a href="../index.html">智教诗途<span class="brand-dot">.</span></a>
             </div>
             <div class="nav-menu" id="navMenu">
                 <a href="../index.html" class="nav-link">首页</a>
@@ -385,151 +157,52 @@
                 <a href="chat.html" class="nav-link active">智能助手</a>
                 <a href="analysis.html" class="nav-link">朗读分析</a>
             </div>
-            <div class="nav-toggle" id="navToggle">
-                <span></span>
-                <span></span>
-                <span></span>
+            <div class="nav-toggle" id="navToggle" onclick="document.getElementById('navMenu').classList.toggle('open')">
+                <span></span><span></span>
             </div>
         </div>
     </nav>
 
-    <!-- 聊天容器 -->
-    <div class="chat-container">
+    <!-- 聊天布局 -->
+    <div class="chat-layout">
         <!-- 侧边栏 -->
-        <div class="chat-sidebar">
-            <div class="chat-header">
-                <div class="assistant-info">
-                    <div class="assistant-avatar">李</div>
-                    <div class="assistant-details">
-                        <h3>李白智能助手</h3>
-                        <div class="assistant-status">
-                            <span class="status-dot"></span>
-                            在线
-                        </div>
+        <aside class="chat-sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-avatar">李</div>
+                <div>
+                    <div class="sidebar-name">太白智能体</div>
+                    <div class="sidebar-status">
+                        <span class="status-dot"></span> 在线
                     </div>
                 </div>
             </div>
-            
-            <div class="chat-features">
-                <h4 style="margin: 0 0 1rem 0; color: var(--gray-700); font-size: 0.875rem;">我可以帮助你：</h4>
-                <ul class="feature-list">
-                    <li class="feature-item">
-                        <span class="feature-icon">📚</span>
-                        推荐适合的朗读材料
-                    </li>
-                    <li class="feature-item">
-                        <span class="feature-icon">🎭</span>
-                        指导朗读技巧和方法
-                    </li>
-                    <li class="feature-item">
-                        <span class="feature-icon">📖</span>
-                        解析诗词文学内容
-                    </li>
-                    <li class="feature-item">
-                        <span class="feature-icon">💡</span>
-                        提供个性化学习建议
-                    </li>
+
+            <div>
+                <div class="sidebar-section-title">Capabilities</div>
+                <ul class="capability-list">
+                    <li class="capability-item"><span class="capability-icon">📚</span> 推荐适合的朗读材料</li>
+                    <li class="capability-item"><span class="capability-icon">🎭</span> 指导朗读技巧和方法</li>
+                    <li class="capability-item"><span class="capability-icon">📖</span> 解析诗词文学内容</li>
+                    <li class="capability-item"><span class="capability-icon">💡</span> 提供个性化学习建议</li>
                 </ul>
             </div>
-            
-            
+
+            <div style="margin-top:auto; padding-top:24px; border-top:1px solid var(--color-border);">
+                <p style="font-size:0.7rem; color:var(--color-text-muted); line-height:1.8;">
+                    Powered by advanced language model. 对话内容仅供学习参考。
+                </p>
+            </div>
+        </aside>
+
+        <!-- 聊天主区域 (Dify iframe) -->
+        <div class="chat-main">
+            <iframe
+                src="https://udify.app/chatbot/GKi5Ug3tl6r9rhen"
+                allow="microphone"
+                style="min-height:500px;">
+            </iframe>
         </div>
-        
-        <!-- 主聊天区域 -->
-        <div class="chat-main" style="padding: 0;"> <iframe
-            src="https://udify.app/chatbot/GKi5Ug3tl6r9rhen"
-            style="width: 100%; height: 100%; min-height: 700px; border: none;"
-            frameborder="0"
-            allow="microphone">
-           </iframe>
-       </div>
     </div>
 
-    <script src="../js/main.js"></script>
-    <script>
-        // 聊天状态
-        let isTyping = false;
-        let conversationHistory = [];
-
-        // API配置
-        const API_CONFIG = {
-            url: 'https://api.dify.ai/v1/chat-messages',
-            key: 'app-K9moTcSFlyk7pA1jG7olgtyP'
-        };
-
-        // 初始化
-        document.addEventListener('DOMContentLoaded', function() {
-            initChat();
-        });
-
-        function initChat() {
-            const chatInput = document.getElementById('chatInput');
-            const sendButton = document.getElementById('sendButton');
-
-            // 输入框事件
-            chatInput.addEventListener('input', function() {
-                this.style.height = 'auto';
-                this.style.height = Math.min(this.scrollHeight, 120) + 'px';
-                
-                // 更新发送按钮状态
-                sendButton.disabled = !this.value.trim();
-            });
-
-            // 回车发送消息
-            chatInput.addEventListener('keydown', function(e) {
-                if (e.key === 'Enter' && !e.shiftKey) {
-                    e.preventDefault();
-                    sendMessage();
-                }
-            });
-
-            // 初始化发送按钮状态
-            sendButton.disabled = true;
-        }
-
-        // 发送消息
-        async function sendMessage() {
-            const chatInput = document.getElementById('chatInput');
-            const message = chatInput.value.trim();
-            
-            if (!message || isTyping) return;
-
-            // 清空输入框
-            chatInput.value = '';
-            chatInput.style.height = 'auto';
-            document.getElementById('sendButton').disabled = true;
-
-            // 隐藏欢迎消息
-            const welcomeMessage = document.getElementById('welcomeMessage');
-            if (welcomeMessage) {
-                welcomeMessage.style.display = 'none';
-            }
-
-            // 添加用户消息
-            addMessage('user', message);
-
-            // 显示打字指示器
-            showTypingIndicator();
-
-            try {
-                // 调用API
-                const response = await callDifyAPI(message);
-                
-                // 隐藏打字指示器
-                hideTypingIndicator();
-                
-                // 添加助手回复
-                addMessage('assistant', response);
-                
-            } catch (error) {
-                console.error('API调用失败:', error);
-                hideTypingIndicator();
-                addMessage('assistant', '抱歉，我现在无法回复。请稍后再试。', true);
-            }
-        }
-
-        
-    </script>
 </body>
 </html>
-
