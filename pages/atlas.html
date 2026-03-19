@@ -281,8 +281,16 @@
     });
 
     // China Map with ECharts
-    var GEOJSON_URL = '../data/china.json';
+    var GEOJSON_LOCAL = '../data/china.json';
+    var GEOJSON_CDN = 'https://geo.datav.aliyun.com/areas_v3/bound/100000_full.json';
     var chartInstance = null;
+
+    function fetchGeoJson(url) {
+        return fetch(url).then(function(response) {
+            if (!response.ok) throw new Error('HTTP ' + response.status);
+            return response.json();
+        });
+    }
 
     function loadMap() {
         var loadingEl = document.getElementById('mapLoading');
@@ -291,10 +299,10 @@
         loadingEl.classList.remove('hidden');
         errorEl.classList.remove('visible');
 
-        fetch(GEOJSON_URL)
-            .then(function(response) {
-                if (!response.ok) throw new Error('HTTP ' + response.status);
-                return response.json();
+        fetchGeoJson(GEOJSON_LOCAL)
+            .catch(function() {
+                // 本地 file:// 协议下 fetch 会被 CORS 阻止，回退到 CDN
+                return fetchGeoJson(GEOJSON_CDN);
             })
             .then(function(geoJson) {
                 echarts.registerMap('china', geoJson);

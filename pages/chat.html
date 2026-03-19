@@ -349,14 +349,11 @@
 
         <!-- 聊天主区域 (Dify iframe) -->
         <div class="chat-main">
-            <iframe
-                id="difyFrame"
-                src="https://udify.app/chatbot/GKi5Ug3tl6r9rhen"
-                allow="microphone"
-                style="width:100%; flex:1; border:none; background:var(--color-black); min-height:500px;">
-            </iframe>
+            <div id="difyChatApp" style="flex:1;"></div>
         </div>
     </div>
 
+    <script src="../js/dify-config.local.js"></script>
+    <script src="../js/dify-chat.js"></script>
 </body>
 </html>
