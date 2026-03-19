@@ -347,13 +347,43 @@
             </div>
         </aside>
 
-        <!-- 聊天主区域 (Dify iframe) -->
+        <!-- 聊天主区域 -->
         <div class="chat-main">
-            <div id="difyChatApp" style="flex:1;"></div>
+            <!-- HTTPS 环境下加载 iframe（GitHub Pages） -->
+            <iframe
+                id="difyFrame"
+                allow="microphone"
+                style="width:100%; flex:1; border:none; background:var(--color-black); min-height:500px; display:none;">
+            </iframe>
+
+            <!-- file:// 环境下的回退界面 -->
+            <div id="difyFallback" style="display:none; flex:1; flex-direction:column; align-items:center; justify-content:center; gap:24px; padding:40px; text-align:center;">
+                <div style="width:72px; height:72px; border-radius:50%; border:1px solid var(--color-electric-dim); display:flex; align-items:center; justify-content:center; font-size:1.8rem;">💬</div>
+                <div style="font-family:var(--font-serif); font-size:1.6rem; font-weight:300; color:var(--color-white);">本地预览限制</div>
+                <p style="font-size:0.85rem; color:var(--color-text-secondary); max-width:420px; line-height:1.9;">
+                    由于浏览器安全策略，本地 <code style="color:var(--color-electric); background:rgba(0,240,255,0.08); padding:2px 6px; border-radius:4px;">file://</code> 协议下无法加载聊天窗口。<br>
+                    请通过 GitHub Pages 在线访问，或点击下方按钮直接对话。
+                </p>
+                <a href="https://udify.app/chatbot/GKi5Ug3tl6r9rhen" target="_blank" rel="noopener noreferrer"
+                   class="btn-glow" style="margin-top:8px;">
+                    打开太白智能体 ↗
+                </a>
+            </div>
         </div>
     </div>
 
-    <script src="../js/dify-config.local.js"></script>
-    <script src="../js/dify-chat.js"></script>
+    <script>
+    (function() {
+        var frame = document.getElementById('difyFrame');
+        var fallback = document.getElementById('difyFallback');
+        if (window.location.protocol === 'file:') {
+            fallback.style.display = 'flex';
+        } else {
+            frame.src = 'https://udify.app/chatbot/GKi5Ug3tl6r9rhen';
+            frame.style.display = 'block';
+        }
+    })();
+    </script>
+
 </body>
 </html>
