@@ -124,11 +124,163 @@
             overflow: hidden;
         }
 
-        .chat-main iframe {
-            width: 100%;
+        .chat-panel {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            padding: 28px;
+            gap: 20px;
+            background:
+                radial-gradient(circle at top right, rgba(0, 240, 255, 0.08), transparent 30%),
+                linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0)),
+                var(--color-black);
+        }
+
+        .chat-panel__header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .chat-panel__eyebrow {
+            font-size: 0.65rem;
+            letter-spacing: var(--tracking-widest);
+            text-transform: uppercase;
+            color: var(--color-electric);
+            margin-bottom: 8px;
+        }
+
+        .chat-panel__title {
+            margin: 0;
+            font-family: var(--font-serif);
+            font-size: clamp(1.6rem, 3vw, 2.4rem);
+            font-weight: 400;
+        }
+
+        .chat-panel__reset,
+        .chat-panel__composer button {
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            background: rgba(255, 255, 255, 0.04);
+            color: var(--color-white);
+            border-radius: 999px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .chat-panel__reset {
+            padding: 10px 16px;
+            font-size: 0.8rem;
+        }
+
+        .chat-panel__reset:hover,
+        .chat-panel__composer button:hover {
+            border-color: var(--color-electric);
+            color: var(--color-electric);
+        }
+
+        .chat-panel__messages {
             flex: 1;
-            border: none;
-            background: var(--color-black);
+            min-height: 0;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            padding-right: 6px;
+        }
+
+        .chat-message {
+            max-width: min(760px, 92%);
+            padding: 18px 20px;
+            border-radius: 20px;
+            border: 1px solid var(--color-border);
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .chat-message--user {
+            align-self: flex-end;
+            background: rgba(0, 240, 255, 0.12);
+            border-color: rgba(0, 240, 255, 0.22);
+        }
+
+        .chat-message__meta {
+            font-size: 0.72rem;
+            letter-spacing: var(--tracking-wide);
+            text-transform: uppercase;
+            color: var(--color-text-muted);
+            margin-bottom: 10px;
+        }
+
+        .chat-message__body {
+            font-size: 0.92rem;
+            line-height: 1.9;
+            color: var(--color-text-primary);
+            word-break: break-word;
+        }
+
+        .chat-message__body--muted {
+            color: var(--color-text-secondary);
+        }
+
+        .chat-system-message {
+            align-self: center;
+            max-width: 760px;
+            padding: 10px 14px;
+            font-size: 0.82rem;
+            line-height: 1.7;
+            color: var(--color-text-secondary);
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px dashed rgba(255, 255, 255, 0.12);
+            border-radius: 12px;
+        }
+
+        .chat-system-message--error {
+            color: #ffb4b4;
+            border-color: rgba(255, 120, 120, 0.3);
+            background: rgba(255, 80, 80, 0.08);
+        }
+
+        .chat-panel__composer {
+            display: flex;
+            align-items: flex-end;
+            gap: 14px;
+            padding-top: 20px;
+            border-top: 1px solid var(--color-border);
+        }
+
+        .chat-panel__composer textarea {
+            flex: 1;
+            resize: none;
+            min-height: 58px;
+            max-height: 180px;
+            padding: 16px 18px;
+            border-radius: 18px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.03);
+            color: var(--color-white);
+            font: inherit;
+            line-height: 1.7;
+            outline: none;
+        }
+
+        .chat-panel__composer textarea:focus {
+            border-color: rgba(0, 240, 255, 0.4);
+            box-shadow: 0 0 0 3px rgba(0, 240, 255, 0.08);
+        }
+
+        .chat-panel__composer button {
+            padding: 0 22px;
+            height: 58px;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+        }
+
+        .chat-panel__composer button:disabled,
+        .chat-panel__composer textarea:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
         }
 
         /* --- Responsive --- */
@@ -156,6 +308,7 @@
                 <a href="materials.html" class="nav-link">资料库</a>
                 <a href="chat.html" class="nav-link active">智能助手</a>
                 <a href="analysis.html" class="nav-link">朗读分析</a>
+                <a href="atlas.html" class="nav-link">地图册</a>
             </div>
             <div class="nav-toggle" id="navToggle" onclick="document.getElementById('navMenu').classList.toggle('open')">
                 <span></span><span></span>
@@ -196,13 +349,11 @@
 
         <!-- 聊天主区域 (Dify iframe) -->
         <div class="chat-main">
-            <iframe
-                src="https://udify.app/chatbot/GKi5Ug3tl6r9rhen"
-                allow="microphone"
-                style="min-height:500px;">
-            </iframe>
+            <div id="difyChatApp"></div>
         </div>
     </div>
 
+    <script src="../js/dify-config.local.js"></script>
+    <script src="../js/dify-chat.js"></script>
 </body>
 </html>

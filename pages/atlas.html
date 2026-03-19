@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>地图册 - 智教诗途</title>
+    <meta name="description" content="智教诗途文化地图册。以数据可视化的方式探索中华诗词文化的地理分布。">
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <!-- ECharts -->
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+    <style>
+        /* --- Map Container --- */
+        .map-wrapper {
+            position: relative;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            aspect-ratio: 4 / 3;
+            min-height: 500px;
+            background: var(--color-card);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-xl);
+            overflow: hidden;
+            transition: border-color var(--transition-fast);
+        }
+
+        .map-wrapper:hover {
+            border-color: var(--color-border-hover);
+        }
+
+        #chinaMap {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* --- Loading State --- */
+        .map-loading {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            z-index: 10;
+            background: var(--color-card);
+            transition: opacity 0.5s ease;
+        }
+
+        .map-loading.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .map-spinner {
+            width: 40px;
+            height: 40px;
+            border: 2px solid var(--color-border);
+            border-top-color: var(--color-electric);
+            border-radius: 50%;
+            animation: mapSpin 1s linear infinite;
+        }
+
+        @keyframes mapSpin {
+            to { transform: rotate(360deg); }
+        }
+
+        .map-loading-text {
+            font-family: var(--font-sans);
+            font-size: 0.8rem;
+            color: var(--color-text-secondary);
+            letter-spacing: var(--tracking-wide);
+        }
+
+        /* --- Error State --- */
+        .map-error {
+            display: none;
+            position: absolute;
+            inset: 0;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            z-index: 10;
+            background: var(--color-card);
+        }
+
+        .map-error.visible {
+            display: flex;
+        }
+
+        .map-error-icon {
+            font-size: 2rem;
+            opacity: 0.4;
+        }
+
+        .map-error-text {
+            font-size: 0.85rem;
+            color: var(--color-text-secondary);
+            text-align: center;
+            max-width: 360px;
+            line-height: 1.8;
+        }
+
+        /* --- Stats Bar --- */
+        .stats-bar {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-top: 32px;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .stat-card {
+            background: var(--color-card);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            padding: 24px 20px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            transition: all var(--transition-fast);
+        }
+
+        .stat-card:hover {
+            background: var(--color-card-hover);
+            border-color: var(--color-border-hover);
+            transform: translateY(-2px);
+        }
+
+        .stat-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 1px solid var(--color-electric-dim);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+
+        .stat-label {
+            font-size: 0.65rem;
+            letter-spacing: var(--tracking-wide);
+            text-transform: uppercase;
+            color: var(--color-text-muted);
+            margin-bottom: 4px;
+        }
+
+        .stat-value {
+            font-family: var(--font-serif);
+            font-size: 1.4rem;
+            font-weight: 300;
+            color: var(--color-electric);
+        }
+
+        @media (max-width: 768px) {
+            .map-wrapper {
+                aspect-ratio: auto;
+                min-height: 400px;
+                height: 60vh;
+                border-radius: var(--radius-lg);
+            }
+            .stats-bar {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 导航栏 -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <a href="../index.html">智教诗途<span class="brand-dot">.</span></a>
+            </div>
+            <div class="nav-menu" id="navMenu">
+                <a href="../index.html" class="nav-link">首页</a>
+                <a href="materials.html" class="nav-link">资料库</a>
+                <a href="chat.html" class="nav-link">智能助手</a>
+                <a href="analysis.html" class="nav-link">朗读分析</a>
+                <a href="atlas.html" class="nav-link active">地图册</a>
+            </div>
+            <div class="nav-toggle" id="navToggle" onclick="document.getElementById('navMenu').classList.toggle('open')">
+                <span></span><span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 页面头部 -->
+    <header class="page-header section-border" style="padding-bottom:80px;">
+        <div class="ambient-glow" style="top:-20%; left:-10%; width:40vw; height:40vw; opacity:0.25;"></div>
+        <div class="container" style="position:relative; z-index:1;">
+            <span class="page-header-tag fade-up">Cartographic Atlas</span>
+            <h1 class="page-header-title fade-up delay-100">文化地图册</h1>
+            <p class="page-header-desc fade-up delay-200">以数据可视化的视角，纵览中华文化的地理脉络与诗词分布。</p>
+        </div>
+    </header>
+
+    <!-- 主要内容 -->
+    <main style="padding:80px 24px;">
+
+        <!-- 地图容器 -->
+        <div class="map-wrapper fade-up delay-200">
+            <div id="chinaMap"></div>
+            <div class="map-loading" id="mapLoading">
+                <div class="map-spinner"></div>
+                <div class="map-loading-text">正在加载地图数据...</div>
+            </div>
+            <div class="map-error" id="mapError">
+                <div class="map-error-icon">⚠</div>
+                <div class="map-error-text" id="mapErrorText">地图数据加载失败，请检查网络连接后刷新页面重试。</div>
+                <button class="btn-ghost" onclick="loadMap()" style="padding:10px 28px;">重新加载</button>
+            </div>
+        </div>
+
+        <!-- 数据统计 -->
+        <div class="stats-bar fade-up delay-300">
+            <div class="stat-card">
+                <div class="stat-icon">📍</div>
+                <div>
+                    <div class="stat-label">Provinces</div>
+                    <div class="stat-value">34</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">📜</div>
+                <div>
+                    <div class="stat-label">Poetry Origins</div>
+                    <div class="stat-value">2,800+</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">🏛</div>
+                <div>
+                    <div class="stat-label">Cultural Sites</div>
+                    <div class="stat-value">1,200+</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">📖</div>
+                <div>
+                    <div class="stat-label">Dynasties Covered</div>
+                    <div class="stat-value">14</div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer" style="padding-top:80px;">
+        <div class="footer-glow"></div>
+        <div class="container-wide">
+            <div class="footer-bottom">
+                <div class="footer-links">
+                    <a href="../index.html">Home</a>
+                    <a href="materials.html">Archive</a>
+                    <a href="chat.html">AI Dialogue</a>
+                    <a href="analysis.html">Analysis</a>
+                </div>
+                <div class="footer-brand-text">智教诗途 © 2026</div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+    // Navbar scroll
+    window.addEventListener('scroll', function() {
+        var navbar = document.getElementById('navbar');
+        if (window.scrollY > 60) navbar.classList.add('scrolled');
+        else navbar.classList.remove('scrolled');
+    });
+
+    // China Map with ECharts
+    var GEOJSON_URL = 'https://geo.datav.aliyun.com/areas_v3/bound/100000_full.json';
+    var chartInstance = null;
+
+    function loadMap() {
+        var loadingEl = document.getElementById('mapLoading');
+        var errorEl = document.getElementById('mapError');
+
+        loadingEl.classList.remove('hidden');
+        errorEl.classList.remove('visible');
+
+        fetch(GEOJSON_URL)
+            .then(function(response) {
+                if (!response.ok) throw new Error('HTTP ' + response.status);
+                return response.json();
+            })
+            .then(function(geoJson) {
+                echarts.registerMap('china', geoJson);
+                renderChart();
+                loadingEl.classList.add('hidden');
+            })
+            .catch(function(error) {
+                console.error('地图数据加载失败:', error);
+                loadingEl.classList.add('hidden');
+                document.getElementById('mapErrorText').textContent =
+                    '地图数据加载失败 (' + error.message + ')，请检查网络连接后刷新页面重试。';
+                errorEl.classList.add('visible');
+            });
+    }
+
+    // --- 李白足迹数据 ---
+    var poetryMarkers = [
+        {
+            name: '安徽宣城 · 敬亭山',
+            value: [118.75, 30.95],
+            poet: '李白',
+            poemTitle: '独坐敬亭山',
+            poemLines: [
+                '众鸟高飞尽，',
+                '孤云独去闲。',
+                '相看两不厌，',
+                '只有敬亭山。'
+            ]
+        },
+        {
+            name: '白帝城 · 奉节',
+            value: [109.46, 31.05],
+            poet: '李白',
+            poemTitle: '早发白帝城',
+            poemLines: [
+                '朝辞白帝彩云间，',
+                '千里江陵一日还。',
+                '两岸猿声啼不住，',
+                '轻舟已过万重山。'
+            ]
+        }
+    ];
+
+    function buildTooltipHtml(data) {
+        var divider = '<div style="width:40px;height:1px;background:linear-gradient(90deg,transparent,rgba(255,60,60,0.6),transparent);margin:10px auto;"></div>';
+        var html = '<div style="text-align:center;padding:10px 16px;min-width:200px;max-width:280px;">';
+        // 地点名
+        html += '<div style="font-family:\'Cormorant Garamond\',Georgia,serif;font-size:1.1rem;font-weight:400;color:#fff;letter-spacing:0.08em;margin-bottom:2px;">' + data.name + '</div>';
+        // 诗人
+        html += '<div style="font-size:0.65rem;letter-spacing:0.25em;text-transform:uppercase;color:rgba(255,255,255,0.35);margin-bottom:8px;">— ' + data.poet + ' —</div>';
+        html += divider;
+        // 诗题
+        html += '<div style="font-family:\'Cormorant Garamond\',Georgia,serif;font-size:0.95rem;color:#ff4040;font-style:italic;margin-bottom:10px;letter-spacing:0.05em;">《' + data.poemTitle + '》</div>';
+        // 诗句
+        data.poemLines.forEach(function(line) {
+            html += '<div style="font-size:0.85rem;color:rgba(255,255,255,0.75);line-height:2;letter-spacing:0.12em;">' + line + '</div>';
+        });
+        html += divider;
+        html += '<div style="font-size:0.6rem;color:rgba(255,255,255,0.2);letter-spacing:0.15em;margin-top:4px;">CLICK TO EXPLORE</div>';
+        html += '</div>';
+        return html;
+    }
+
+    function renderChart() {
+        var container = document.getElementById('chinaMap');
+        if (chartInstance) chartInstance.dispose();
+        chartInstance = echarts.init(container, null, { renderer: 'canvas' });
+
+        var electricBlue = '#00f0ff';
+        var electricGlow = 'rgba(0, 240, 255, 0.12)';
+        var vermilionRed = '#ff0000';
+        var vermilionGlow = 'rgba(255, 0, 0, 0.35)';
+
+        var option = {
+            backgroundColor: 'transparent',
+            tooltip: {
+                trigger: 'item',
+                backgroundColor: 'rgba(8, 8, 8, 0.95)',
+                borderColor: 'rgba(255, 60, 60, 0.3)',
+                borderWidth: 1,
+                borderRadius: 16,
+                padding: 0,
+                extraCssText: 'backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);box-shadow:0 16px 48px rgba(0,0,0,0.5),0 0 24px rgba(255,0,0,0.08);',
+                textStyle: {
+                    color: '#ffffff',
+                    fontFamily: 'Inter, sans-serif',
+                    fontSize: 13
+                },
+                formatter: function(params) {
+                    // Scatter series tooltip
+                    if (params.seriesType === 'effectScatter' && params.data && params.data.poemTitle) {
+                        return buildTooltipHtml(params.data);
+                    }
+                    // Geo region tooltip
+                    return '<span style="color:' + electricBlue + ';font-weight:600;padding:8px 14px;display:block;">' +
+                           params.name + '</span>';
+                }
+            },
+            geo: {
+                map: 'china',
+                roam: true,
+                scaleLimit: { min: 0.8, max: 5 },
+                zoom: 1.15,
+                center: [104.5, 36],
+                label: {
+                    show: false,
+                    color: 'rgba(255, 255, 255, 0.55)',
+                    fontSize: 10,
+                    fontFamily: 'Inter, sans-serif'
+                },
+                emphasis: {
+                    label: {
+                        show: true,
+                        color: electricBlue,
+                        fontSize: 12,
+                        fontWeight: 600
+                    },
+                    itemStyle: {
+                        areaColor: 'rgba(0, 240, 255, 0.18)',
+                        borderColor: electricBlue,
+                        borderWidth: 1.5,
+                        shadowColor: electricGlow,
+                        shadowBlur: 20
+                    }
+                },
+                itemStyle: {
+                    areaColor: 'rgba(255, 255, 255, 0.035)',
+                    borderColor: 'rgba(255, 255, 255, 0.12)',
+                    borderWidth: 0.6,
+                    shadowColor: 'rgba(0, 0, 0, 0.3)',
+                    shadowBlur: 6
+                },
+                select: {
+                    label: { show: true, color: electricBlue },
+                    itemStyle: {
+                        areaColor: 'rgba(0, 240, 255, 0.15)',
+                        borderColor: electricBlue,
+                        borderWidth: 1
+                    }
+                }
+            },
+            series: [
+                // 涟漪散点层 — 李白足迹
+                {
+                    name: '李白足迹',
+                    type: 'effectScatter',
+                    coordinateSystem: 'geo',
+                    data: poetryMarkers,
+                    symbolSize: 14,
+                    showEffectOn: 'render',
+                    rippleEffect: {
+                        brushType: 'stroke',
+                        scale: 4,
+                        period: 3
+                    },
+                    label: {
+                        show: true,
+                        position: 'right',
+                        formatter: '{b}',
+                        color: 'rgba(255, 255, 255, 0.7)',
+                        fontFamily: 'Inter, sans-serif',
+                        fontSize: 11,
+                        distance: 10
+                    },
+                    emphasis: {
+                        label: {
+                            color: '#fff',
+                            fontWeight: 600
+                        },
+                        itemStyle: {
+                            shadowBlur: 30,
+                            shadowColor: vermilionGlow
+                        }
+                    },
+                    itemStyle: {
+                        color: vermilionRed,
+                        shadowBlur: 12,
+                        shadowColor: vermilionGlow
+                    },
+                    zlevel: 1
+                }
+            ]
+        };
+
+        chartInstance.setOption(option);
+
+        // 点击事件 — 锁定 tooltip 展示诗词
+        chartInstance.on('click', function(params) {
+            if (params.seriesType === 'effectScatter' && params.data && params.data.poemTitle) {
+                chartInstance.dispatchAction({
+                    type: 'showTip',
+                    seriesIndex: 0,
+                    dataIndex: params.dataIndex
+                });
+            }
+        });
+    }
+
+    // Responsive resize
+    window.addEventListener('resize', function() {
+        if (chartInstance) chartInstance.resize();
+    });
+
+    // Init
+    loadMap();
+    </script>
+</body>
+</html>
