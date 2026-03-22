@@ -228,28 +228,28 @@
             <div class="stat-card">
                 <div class="stat-icon">📍</div>
                 <div>
-                    <div class="stat-label">Provinces</div>
+                    <div class="stat-label">覆盖省份</div>
                     <div class="stat-value">34</div>
                 </div>
             </div>
             <div class="stat-card">
                 <div class="stat-icon">📜</div>
                 <div>
-                    <div class="stat-label">Poetry Origins</div>
+                    <div class="stat-label">诗词源流</div>
                     <div class="stat-value">2,800+</div>
                 </div>
             </div>
             <div class="stat-card">
                 <div class="stat-icon">🏛</div>
                 <div>
-                    <div class="stat-label">Cultural Sites</div>
+                    <div class="stat-label">文化遗址</div>
                     <div class="stat-value">1,200+</div>
                 </div>
             </div>
             <div class="stat-card">
                 <div class="stat-icon">📖</div>
                 <div>
-                    <div class="stat-label">Dynasties Covered</div>
+                    <div class="stat-label">涵盖朝代</div>
                     <div class="stat-value">14</div>
                 </div>
             </div>
@@ -319,6 +319,8 @@
     }
 
     // --- 李白足迹数据 ---
+    // 仅标注 materials.html 中写作地点较明确的作品；
+    // 《静夜思》《月下独酌》的具体写作地点说法不一，这里不做落点。
     var poetryMarkers = [
         {
             name: '安徽宣城 · 敬亭山',
@@ -333,7 +335,7 @@
             ]
         },
         {
-            name: '白帝城 · 奉节',
+            name: '重庆奉节 · 白帝城',
             value: [109.46, 31.05],
             poet: '李白',
             poemTitle: '早发白帝城',
@@ -342,6 +344,30 @@
                 '千里江陵一日还。',
                 '两岸猿声啼不住，',
                 '轻舟已过万重山。'
+            ]
+        },
+        {
+            name: '江西九江 · 庐山',
+            value: [115.99, 29.56],
+            poet: '李白',
+            poemTitle: '望庐山瀑布',
+            poemLines: [
+                '日照香炉生紫烟，',
+                '遥看瀑布挂前川。',
+                '飞流直下三千尺，',
+                '疑是银河落九天。'
+            ]
+        },
+        {
+            name: '湖北武汉 · 黄鹤楼',
+            value: [114.30, 30.54],
+            poet: '李白',
+            poemTitle: '黄鹤楼送孟浩然之广陵',
+            poemLines: [
+                '故人西辞黄鹤楼，',
+                '烟花三月下扬州。',
+                '孤帆远影碧空尽，',
+                '唯见长江天际流。'
             ]
         }
     ];
