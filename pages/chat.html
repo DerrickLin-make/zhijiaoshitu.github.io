@@ -3,302 +3,195 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>太白智能体 - 智教诗途</title>
-    <meta name="description" content="与太白AI智能体对话，获得个性化的朗读指导和文学知识解析。">
-    <link rel="stylesheet" href="../css/main.css">
+    <meta name="color-scheme" content="light">
+    <title>智能助手 | 智教诗途</title>
+    <meta name="description" content="与太白智能体对话，获取课堂灵感、朗读建议与文本赏析。">
+    <link rel="stylesheet" href="../css/main.css?v=2">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         .chat-layout {
-            display: flex;
-            height: calc(100vh - 80px);
-            margin-top: 80px;
+            display: grid;
+            grid-template-columns: 0.92fr 1.08fr;
+            gap: 28px;
+            min-height: calc(100vh - 240px);
         }
 
-        /* --- Sidebar --- */
-        .chat-sidebar {
-            width: 300px;
-            flex-shrink: 0;
-            background: var(--color-dark);
-            border-right: 1px solid var(--color-border);
-            display: flex;
-            flex-direction: column;
-            padding: 40px 28px;
-            gap: 32px;
-            overflow-y: auto;
+        .assistant-info,
+        .assistant-panel {
+            border: 1px solid var(--line);
+            border-radius: 30px;
+            box-shadow: var(--shadow-md);
         }
 
-        .sidebar-header {
-            display: flex;
+        .assistant-info {
+            background: rgba(255, 253, 249, 0.86);
+            padding: 28px;
+        }
+
+        .assistant-badge {
+            display: inline-flex;
             align-items: center;
-            gap: 16px;
+            gap: 10px;
+            margin-bottom: 18px;
         }
 
-        .sidebar-avatar {
+        .assistant-avatar {
             width: 52px;
             height: 52px;
             border-radius: 50%;
-            background: linear-gradient(135deg, var(--color-electric), #0080ff);
             display: flex;
             align-items: center;
             justify-content: center;
             font-family: var(--font-serif);
-            font-size: 1.3rem;
-            font-weight: 400;
-            color: var(--color-black);
-            flex-shrink: 0;
+            font-size: 1.35rem;
+            color: #fffdf9;
+            background: linear-gradient(135deg, var(--tea-deep), var(--tea));
         }
 
-        .sidebar-name {
+        .assistant-name {
             font-family: var(--font-serif);
-            font-size: 1.2rem;
-            font-weight: 400;
-            letter-spacing: 0.03em;
+            font-size: 2rem;
+            font-weight: 500;
         }
 
-        .sidebar-status {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 0.7rem;
-            color: var(--color-success);
-            margin-top: 4px;
+        .assistant-status {
+            font-size: 0.9rem;
+            color: var(--celadon-deep);
         }
 
-        .status-dot {
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            background: var(--color-success);
-            animation: statusPulse 2s infinite;
+        .assistant-title {
+            margin: 10px 0 0;
+            font-family: var(--font-serif);
+            font-size: clamp(2rem, 4vw, 3rem);
+            line-height: 1.45;
+            font-weight: 500;
         }
 
-        @keyframes statusPulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.4; }
-        }
-
-        .sidebar-section-title {
-            font-family: var(--font-sans);
-            font-size: 0.6rem;
-            letter-spacing: var(--tracking-widest);
-            text-transform: uppercase;
-            color: var(--color-text-muted);
-            font-weight: 600;
-            margin-bottom: 12px;
+        .assistant-copy {
+            margin-top: 18px;
+            color: #6f6256;
+            font-size: 0.95rem;
+            line-height: 2;
         }
 
         .capability-list {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
+            display: grid;
+            gap: 14px;
+            margin-top: 28px;
         }
 
         .capability-item {
             display: flex;
             align-items: center;
-            gap: 10px;
-            font-size: 0.8rem;
-            color: var(--color-text-secondary);
-            line-height: 1.5;
+            gap: 12px;
+            padding: 14px 16px;
+            border-radius: 18px;
+            background: #f8f3ec;
+            color: #6f6256;
+            font-size: 0.92rem;
         }
 
-        .capability-icon {
-            font-size: 0.9rem;
+        .capability-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
             flex-shrink: 0;
-            width: 20px;
-            text-align: center;
+            background: var(--celadon);
+            box-shadow: 0 0 14px rgba(169, 184, 165, 0.35);
         }
 
-        /* --- Chat Main Area --- */
-        .chat-main {
-            flex: 1;
+        .assistant-panel {
             display: flex;
             flex-direction: column;
-            background: var(--color-black);
-            position: relative;
             overflow: hidden;
+            background: rgba(255, 255, 255, 0.84);
         }
 
-        .chat-panel {
-            display: flex;
-            flex-direction: column;
-            height: 100%;
-            padding: 28px;
-            gap: 20px;
-            background:
-                radial-gradient(circle at top right, rgba(0, 240, 255, 0.08), transparent 30%),
-                linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0)),
-                var(--color-black);
-        }
-
-        .chat-panel__header {
+        .assistant-panel-head {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 20px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid var(--color-border);
+            gap: 16px;
+            padding: 24px 24px 18px;
+            border-bottom: 1px solid #efe4d8;
         }
 
-        .chat-panel__eyebrow {
-            font-size: 0.65rem;
-            letter-spacing: var(--tracking-widest);
-            text-transform: uppercase;
-            color: var(--color-electric);
-            margin-bottom: 8px;
-        }
-
-        .chat-panel__title {
+        .assistant-panel-title {
             margin: 0;
             font-family: var(--font-serif);
-            font-size: clamp(1.6rem, 3vw, 2.4rem);
-            font-weight: 400;
+            font-size: 1.9rem;
+            font-weight: 500;
         }
 
-        .chat-panel__reset,
-        .chat-panel__composer button {
-            border: 1px solid rgba(255, 255, 255, 0.14);
-            background: rgba(255, 255, 255, 0.04);
-            color: var(--color-white);
-            border-radius: 999px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .chat-panel__reset {
-            padding: 10px 16px;
-            font-size: 0.8rem;
-        }
-
-        .chat-panel__reset:hover,
-        .chat-panel__composer button:hover {
-            border-color: var(--color-electric);
-            color: var(--color-electric);
-        }
-
-        .chat-panel__messages {
-            flex: 1;
-            min-height: 0;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-            padding-right: 6px;
-        }
-
-        .chat-message {
-            max-width: min(760px, 92%);
-            padding: 18px 20px;
-            border-radius: 20px;
-            border: 1px solid var(--color-border);
-            background: rgba(255, 255, 255, 0.03);
-        }
-
-        .chat-message--user {
-            align-self: flex-end;
-            background: rgba(0, 240, 255, 0.12);
-            border-color: rgba(0, 240, 255, 0.22);
-        }
-
-        .chat-message__meta {
-            font-size: 0.72rem;
-            letter-spacing: var(--tracking-wide);
-            text-transform: uppercase;
-            color: var(--color-text-muted);
-            margin-bottom: 10px;
-        }
-
-        .chat-message__body {
-            font-size: 0.92rem;
-            line-height: 1.9;
-            color: var(--color-text-primary);
-            word-break: break-word;
-        }
-
-        .chat-message__body--muted {
-            color: var(--color-text-secondary);
-        }
-
-        .chat-system-message {
-            align-self: center;
-            max-width: 760px;
-            padding: 10px 14px;
-            font-size: 0.82rem;
-            line-height: 1.7;
-            color: var(--color-text-secondary);
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px dashed rgba(255, 255, 255, 0.12);
-            border-radius: 12px;
-        }
-
-        .chat-system-message--error {
-            color: #ffb4b4;
-            border-color: rgba(255, 120, 120, 0.3);
-            background: rgba(255, 80, 80, 0.08);
-        }
-
-        .chat-panel__composer {
-            display: flex;
-            align-items: flex-end;
-            gap: 14px;
-            padding-top: 20px;
-            border-top: 1px solid var(--color-border);
-        }
-
-        .chat-panel__composer textarea {
-            flex: 1;
-            resize: none;
-            min-height: 58px;
-            max-height: 180px;
-            padding: 16px 18px;
-            border-radius: 18px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            background: rgba(255, 255, 255, 0.03);
-            color: var(--color-white);
-            font: inherit;
-            line-height: 1.7;
-            outline: none;
-        }
-
-        .chat-panel__composer textarea:focus {
-            border-color: rgba(0, 240, 255, 0.4);
-            box-shadow: 0 0 0 3px rgba(0, 240, 255, 0.08);
-        }
-
-        .chat-panel__composer button {
-            padding: 0 22px;
-            height: 58px;
+        .assistant-panel-desc {
+            margin-top: 6px;
             font-size: 0.9rem;
-            flex-shrink: 0;
+            color: var(--tea-deep);
         }
 
-        .chat-panel__composer button:disabled,
-        .chat-panel__composer textarea:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
+        .dify-frame {
+            width: 100%;
+            min-height: 660px;
+            border: none;
+            background: transparent;
+            display: none;
         }
 
-        /* --- Responsive --- */
-        @media (max-width: 900px) {
-            .chat-sidebar {
-                display: none;
-            }
+        .dify-fallback {
+            display: none;
+            flex: 1;
+            align-items: center;
+            justify-content: center;
+            padding: 36px 24px;
+        }
+
+        .fallback-card {
+            max-width: 520px;
+            text-align: center;
+            border: 1px solid var(--line);
+            border-radius: 28px;
+            background: rgba(255, 253, 249, 0.95);
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .fallback-icon {
+            width: 74px;
+            height: 74px;
+            margin: 0 auto 18px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f5efe6;
+            color: var(--tea-deep);
+            font-size: 1.8rem;
+        }
+
+        .fallback-title {
+            margin: 0;
+            font-family: var(--font-serif);
+            font-size: 2rem;
+            font-weight: 500;
+        }
+
+        .fallback-copy {
+            margin-top: 14px;
+            color: var(--text-soft);
+            line-height: 2;
+        }
+
+        @media (max-width: 980px) {
             .chat-layout {
-                margin-top: 70px;
-                height: calc(100vh - 70px);
+                grid-template-columns: 1fr;
             }
         }
     </style>
 </head>
 <body>
-
-    <!-- 导航栏 -->
-    <nav class="navbar scrolled" id="navbar" style="mix-blend-mode:normal; background:rgba(3,3,3,0.95); border-bottom:1px solid var(--color-border);">
+    <nav class="navbar" id="navbar">
         <div class="nav-container">
             <div class="nav-brand">
                 <a href="../index.html">智教诗途<span class="brand-dot">.</span></a>
@@ -308,82 +201,116 @@
                 <a href="materials.html" class="nav-link">资料库</a>
                 <a href="chat.html" class="nav-link active">智能助手</a>
                 <a href="analysis.html" class="nav-link">朗读分析</a>
-                <a href="atlas.html" class="nav-link">地图册</a>
+                <a href="atlas.html" class="nav-link">文化地图</a>
             </div>
-            <div class="nav-toggle" id="navToggle" onclick="document.getElementById('navMenu').classList.toggle('open')">
-                <span></span><span></span>
+            <div class="nav-toggle" id="navToggle">
+                <span></span>
+                <span></span>
             </div>
         </div>
     </nav>
 
-    <!-- 聊天布局 -->
-    <div class="chat-layout">
-        <!-- 侧边栏 -->
-        <aside class="chat-sidebar">
-            <div class="sidebar-header">
-                <div class="sidebar-avatar">李</div>
-                <div>
-                    <div class="sidebar-name">太白智能体</div>
-                    <div class="sidebar-status">
-                        <span class="status-dot"></span> 在线
+    <main class="container home-main">
+        <section class="hero-shell">
+            <div class="hero" style="align-items: stretch; grid-template-columns: 320px 1fr;">
+                <div style="display:flex;flex-direction:column;justify-content:center;">
+                    <span class="page-header-tag">TAIBAI ASSISTANT</span>
+                    <h1 class="page-header-title" style="font-size: 2.8rem;">智能辅导页</h1>
+                    <p class="page-header-desc" style="font-size:1rem;color:#6f6256;">像一位在书桌旁落座的助教，回答你的文本与课堂问题。</p>
+                    
+                    <div style="margin-top:36px;padding-top:32px;border-top:1px solid rgba(232,222,210,0.6);">
+                        <div style="display:flex;align-items:center;gap:12px;">
+                            <div style="width:40px;height:40px;border-radius:50%;background:var(--paper-soft);border:1px solid #d7c7b7;display:flex;align-items:center;justify-content:center;color:var(--text);font-family:var(--font-serif);font-size:16px;">白</div>
+                            <div>
+                                <div style="font-weight:500;color:var(--tea-deep);">太白</div>
+                                <div style="font-size:12px;color:var(--text-mute);">在线 · 教学与朗读支持</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="margin-top:24px;display:flex;flex-direction:column;gap:12px;font-size:13px;color:#6f6256;">
+                        <div style="display:flex;align-items:flex-start;gap:8px;"><span style="color:var(--tea);margin-top:2px;">•</span>推荐适合学段的作品</div>
+                        <div style="display:flex;align-items:flex-start;gap:8px;"><span style="color:var(--tea);margin-top:2px;">•</span>提供朗读停连与情感建议</div>
+                        <div style="display:flex;align-items:flex-start;gap:8px;"><span style="color:var(--tea);margin-top:2px;">•</span>生成课堂导入与活动思路</div>
                     </div>
                 </div>
+
+                <div class="hero-panel-wrap">
+                    <div class="hero-glow"></div>
+                    <section class="assistant-panel hero-panel" style="padding:0;display:flex;flex-direction:column;height:680px;background:rgba(255,255,255,0.85);">
+                        <div style="padding:22px 24px;border-bottom:1px solid rgba(232,222,210,0.6);display:flex;justify-content:space-between;align-items:center;">
+                            <div>
+                                <h2 style="margin:0;font-family:var(--font-serif);font-size:1.6rem;font-weight:500;">与太白对话</h2>
+                                <div style="font-size:12px;color:var(--text-mute);margin-top:4px;">课堂问答 · 朗读指导 · 文本赏析</div>
+                            </div>
+                            <span class="pill pill-soft">在线响应</span>
+                        </div>
+                        <iframe
+
+                    id="difyFrame"
+                    class="dify-frame"
+                    allow="microphone">
+                </iframe>
+
+                <div id="difyFallback" class="dify-fallback">
+                    <div class="fallback-card">
+                        <div class="fallback-icon">💬</div>
+                        <h3 class="fallback-title">本地预览限制</h3>
+                        <p class="fallback-copy">由于浏览器安全策略，本地 <code>file://</code> 协议下无法直接嵌入聊天窗口。你仍然可以通过下方按钮打开太白智能体，继续体验完整对话。</p>
+                        <div style="margin-top:20px;">
+                            <a href="https://udify.app/chatbot/GKi5Ug3tl6r9rhen" target="_blank" rel="noopener noreferrer" class="btn-primary">打开太白智能体</a>
+                        </div>
+                    </div>
+                </div>
+                    </section>
+                </div>
             </div>
+        </section>
+    </main>
 
-            <div>
-                <div class="sidebar-section-title">Capabilities</div>
-                <ul class="capability-list">
-                    <li class="capability-item"><span class="capability-icon">📚</span> 推荐适合的朗读材料</li>
-                    <li class="capability-item"><span class="capability-icon">🎭</span> 指导朗读技巧和方法</li>
-                    <li class="capability-item"><span class="capability-icon">📖</span> 解析诗词文学内容</li>
-                    <li class="capability-item"><span class="capability-icon">💡</span> 提供个性化学习建议</li>
-                </ul>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-panel">
+                <p class="eyebrow">ASK, EXPLORE, GUIDE</p>
+                <h2 class="footer-title">让 AI 说得少一点，<br>让真正有价值的帮助更清楚一点。</h2>
+                <p class="footer-desc">智能助手页保留独立分页，但整体体验从“聊天产品”调整为“教学与朗读辅导空间”，让功能更贴近教师与审美型学习者的心理预期。</p>
+                <div class="footer-actions">
+                    <a href="materials.html" class="btn-primary">先选材料</a>
+                    <a href="analysis.html" class="btn-secondary">查看朗读分析</a>
+                </div>
             </div>
-
-            <div style="margin-top:auto; padding-top:24px; border-top:1px solid var(--color-border);">
-                <p style="font-size:0.7rem; color:var(--color-text-muted); line-height:1.8;">
-                    Powered by advanced language model. 对话内容仅供学习参考。
-                </p>
-            </div>
-        </aside>
-
-        <!-- 聊天主区域 -->
-        <div class="chat-main">
-            <!-- HTTPS 环境下加载 iframe（GitHub Pages） -->
-            <iframe
-                id="difyFrame"
-                allow="microphone"
-                style="width:100%; flex:1; border:none; background:var(--color-black); min-height:500px; display:none;">
-            </iframe>
-
-            <!-- file:// 环境下的回退界面 -->
-            <div id="difyFallback" style="display:none; flex:1; flex-direction:column; align-items:center; justify-content:center; gap:24px; padding:40px; text-align:center;">
-                <div style="width:72px; height:72px; border-radius:50%; border:1px solid var(--color-electric-dim); display:flex; align-items:center; justify-content:center; font-size:1.8rem;">💬</div>
-                <div style="font-family:var(--font-serif); font-size:1.6rem; font-weight:300; color:var(--color-white);">本地预览限制</div>
-                <p style="font-size:0.85rem; color:var(--color-text-secondary); max-width:420px; line-height:1.9;">
-                    由于浏览器安全策略，本地 <code style="color:var(--color-electric); background:rgba(0,240,255,0.08); padding:2px 6px; border-radius:4px;">file://</code> 协议下无法加载聊天窗口。<br>
-                    请通过 GitHub Pages 在线访问，或点击下方按钮直接对话。
-                </p>
-                <a href="https://udify.app/chatbot/GKi5Ug3tl6r9rhen" target="_blank" rel="noopener noreferrer"
-                   class="btn-glow" style="margin-top:8px;">
-                    打开太白智能体 ↗
-                </a>
+            <div class="footer-bottom">
+                <div class="footer-links">
+                    <a href="../index.html">首页</a>
+                    <a href="materials.html">资料库</a>
+                    <a href="analysis.html">朗读分析</a>
+                </div>
+                <div class="footer-brand-text">智教诗途 © 2026</div>
             </div>
         </div>
-    </div>
+    </footer>
 
     <script>
-    (function() {
-        var frame = document.getElementById('difyFrame');
-        var fallback = document.getElementById('difyFallback');
-        if (window.location.protocol === 'file:') {
-            fallback.style.display = 'flex';
-        } else {
-            frame.src = 'https://udify.app/chatbot/GKi5Ug3tl6r9rhen';
-            frame.style.display = 'block';
-        }
-    })();
-    </script>
+        window.addEventListener('scroll', function () {
+            var navbar = document.getElementById('navbar');
+            if (window.scrollY > 8) navbar.classList.add('scrolled');
+            else navbar.classList.remove('scrolled');
+        });
 
+        document.getElementById('navToggle').addEventListener('click', function () {
+            document.getElementById('navMenu').classList.toggle('open');
+        });
+
+        (function () {
+            var frame = document.getElementById('difyFrame');
+            var fallback = document.getElementById('difyFallback');
+            if (window.location.protocol === 'file:') {
+                fallback.style.display = 'flex';
+            } else {
+                frame.src = 'https://udify.app/chatbot/GKi5Ug3tl6r9rhen';
+                frame.style.display = 'block';
+            }
+        })();
+    </script>
 </body>
 </html>

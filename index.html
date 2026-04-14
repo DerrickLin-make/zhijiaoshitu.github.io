@@ -3,16 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>智教诗途 | 极致朗读美学</title>
-    <meta name="description" content="专为创意工作者打造的先锋朗读学习平台。结合AI智能分析与高级定制化指导，探索言语之间的极致表达。">
-    <link rel="stylesheet" href="css/main.css">
+    <meta name="color-scheme" content="light">
+    <title>智教诗途 | 诗词朗读与审美学习平台</title>
+    <meta name="description" content="面向教师与有审美追求的学习者，以温润书房气质承载诗词朗读、AI辅导、朗读分析与文化地图。">
+    <link rel="stylesheet" href="css/main.css?v=2">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@400;500;700&display=swap" rel="stylesheet">
 </head>
-<body>
-
-    <!-- 导航栏 -->
+<body class="home-page">
     <nav class="navbar" id="navbar">
         <div class="nav-container">
             <div class="nav-brand">
@@ -21,269 +20,108 @@
             <div class="nav-menu" id="navMenu">
                 <a href="pages/materials.html" class="nav-link">资料库</a>
                 <a href="pages/chat.html" class="nav-link">智能助手</a>
-                <a href="pages/analysis.html" class="nav-link nav-link--electric">朗读分析</a>
-                <a href="pages/atlas.html" class="nav-link">地图册</a>
+                <a href="pages/analysis.html" class="nav-link">朗读分析</a>
+                <a href="pages/atlas.html" class="nav-link">文化地图</a>
             </div>
-            <div class="nav-toggle" id="navToggle" onclick="document.getElementById('navMenu').classList.toggle('open')">
+            <div class="nav-toggle" id="navToggle">
                 <span></span>
                 <span></span>
             </div>
         </div>
     </nav>
 
-    <!-- ====== 英雄区 (Hero) ====== -->
-    <section id="hero" style="position:relative; min-height:100vh; display:flex; align-items:center; justify-content:center; padding:120px 24px 80px; overflow:hidden;">
-        <div class="ambient-glow" style="top:20%; left:-15%;"></div>
-        <div class="ambient-glow" style="bottom:-10%; right:-15%; opacity:0.4; animation-delay:-4s;"></div>
-        <div class="grid-texture"></div>
-
-        <div style="max-width:900px; width:100%; position:relative; z-index:1; text-align:center;">
-            <p class="fade-up" style="font-family:var(--font-sans); color:var(--color-electric); font-size:0.65rem; letter-spacing:var(--tracking-widest); text-transform:uppercase; margin-bottom:48px; font-weight:600;">Elevate Your Voice</p>
-
-            <h1 class="fade-up delay-100" style="font-family:var(--font-serif); font-size:clamp(3.5rem, 10vw, 10rem); font-weight:300; line-height:0.96; letter-spacing:var(--tracking-tight); margin-bottom:56px;">
-                重塑朗读<br>
-                <span style="font-style:italic; color:rgba(255,255,255,0.6);">极简</span><span style="background:linear-gradient(90deg, var(--color-electric), #fff); -webkit-background-clip:text; -webkit-text-fill-color:transparent; opacity:0.9;">生命力</span>
-            </h1>
-
-            <p class="fade-up delay-200" style="font-family:var(--font-sans); color:var(--color-text-secondary); font-size:0.95rem; max-width:520px; margin:0 auto 56px; line-height:2; letter-spacing:0.03em; font-weight:300;">
-                摒弃繁杂，专注于声音与文本的纯粹共振。结合先锋数据感知与高级定制化指导，探索言语之间的极致表达。
-            </p>
-
-            <div class="fade-up delay-300" style="display:flex; flex-wrap:wrap; gap:32px; justify-content:center; align-items:center;">
-                <a href="pages/materials.html" class="btn-glow" style="padding:18px 48px;">开始体验</a>
-                <a href="#features" style="display:flex; align-items:center; gap:16px; font-size:0.7rem; letter-spacing:var(--tracking-wide); color:var(--color-text-secondary); text-transform:uppercase; transition:color 0.3s;">
-                    探索架构
-                    <span style="display:inline-block; width:32px; height:1px; background:rgba(255,255,255,0.2); transition:all 0.5s;"></span>
-                </a>
-            </div>
-
-            <!-- 滚动暗示 -->
-            <div style="position:absolute; bottom:-60px; left:50%; transform:translateX(-50%); opacity:0.4;">
-                <div style="width:1px; height:64px; background:linear-gradient(to bottom, transparent, var(--color-electric), transparent); animation:pulse 2s infinite;"></div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ====== 核心功能 Section ====== -->
-    <section id="features" class="section-border" style="position:relative; padding:160px 24px;">
-        <div class="container-wide">
-            <!-- Section Header -->
-            <div style="display:flex; flex-wrap:wrap; justify-content:space-between; align-items:flex-end; margin-bottom:100px; gap:40px;">
-                <h2 style="font-family:var(--font-serif); font-size:clamp(2.5rem, 5vw, 4.5rem); font-weight:300; letter-spacing:var(--tracking-tight); line-height:1.1;">
-                    架构解构<br>
-                    <span style="color:var(--color-electric); font-style:italic; font-size:clamp(2rem, 4vw, 3.5rem);">先锋感知</span>
-                </h2>
-                <p style="font-family:var(--font-sans); font-size:0.65rem; letter-spacing:var(--tracking-wide); text-transform:uppercase; max-width:220px; text-align:right; color:var(--color-text-secondary); line-height:2;">
-                    跨越感官的维度<br>让每一次发声都成为艺术品
-                </p>
-            </div>
-
-            <!-- Feature Cards Grid -->
-            <div style="display:grid; grid-template-columns:repeat(12, 1fr); gap:24px;">
-
-                <!-- 资料库 (7 col) -->
-                <div class="glass-card" style="grid-column:span 12; padding:48px 56px; position:relative; overflow:hidden; min-height:380px;" id="featureCard1">
-                    <div style="position:absolute; top:0; right:0; width:320px; height:320px; background:var(--color-electric); opacity:0.03; border-radius:50%; filter:blur(80px); transition:opacity 0.7s;"></div>
-                    <div style="position:relative; z-index:1; display:flex; flex-direction:column; justify-content:space-between; height:100%;">
-                        <div>
-                            <span style="color:var(--color-electric); font-size:0.6rem; letter-spacing:var(--tracking-widest); text-transform:uppercase; font-weight:600; display:block; margin-bottom:24px;">01 / Curated Archives</span>
-                            <h3 style="font-family:var(--font-serif); font-size:clamp(2rem, 4vw, 3.2rem); font-weight:300; margin-bottom:20px;">臻选序列库</h3>
-                            <p style="color:var(--color-text-secondary); font-size:0.9rem; line-height:1.9; max-width:500px;">
-                                剔除冗余，保留核心。经过严苛视觉排版筛选的阅读序列，以纯净的背景衬托文字的最本真状态，专为高级审美的你定制。
-                            </p>
-                        </div>
-                        <a href="pages/materials.html" style="display:inline-flex; align-items:center; gap:16px; margin-top:48px; width:max-content; cursor:pointer;">
-                            <span style="font-size:0.7rem; letter-spacing:var(--tracking-wide); text-transform:uppercase; transition:color 0.3s;">Enter Archive</span>
-                            <span style="width:40px; height:40px; border-radius:50%; border:1px solid var(--color-border); display:flex; align-items:center; justify-content:center; transition:border-color 0.3s;">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                            </span>
-                        </a>
+    <main class="container home-main">
+        <section class="page-section section-border">
+            <div class="section-shell">
+                <div class="structure-grid">
+                    <div>
+                        <p class="eyebrow">PLATFORM ARCHITECTURE</p>
+                        <h2 class="section-title">让教师与学习者自然地走完一条朗读路径</h2>
+                        <p class="section-desc">界面不再强调工具感，而是像一间布置得体的书房，陪伴用户从选材、理解、练习到反馈，循序渐进地进入文本。</p>
                     </div>
-                </div>
-
-                <!-- 智能助手 (5 col on md+) -->
-                <div class="glass-card" style="grid-column:span 12; padding:48px 56px; position:relative; overflow:hidden; min-height:380px;">
-                    <div style="position:absolute; bottom:0; left:0; width:100%; height:50%; background:linear-gradient(to top, rgba(0,240,255,0.03), transparent); opacity:0; transition:opacity 0.7s;"></div>
-                    <div style="position:relative; z-index:1; display:flex; flex-direction:column; justify-content:space-between; height:100%;">
-                        <div>
-                            <span style="color:var(--color-text-secondary); font-size:0.6rem; letter-spacing:var(--tracking-widest); text-transform:uppercase; font-weight:600; display:block; margin-bottom:24px;">02 / AI Synthesis</span>
-                            <h3 style="font-family:var(--font-serif); font-size:clamp(2rem, 4vw, 3.2rem); font-weight:300; margin-bottom:20px;">太白智能体</h3>
-                            <p style="color:var(--color-text-secondary); font-size:0.9rem; line-height:1.9; max-width:500px;">
-                                打破时序的数字灵魂。通过顶级语言模型构建，用诗意而非机械的方式为你解析停顿与情感，将对话推向更高维的审美。
-                            </p>
-                        </div>
-                        <a href="pages/chat.html" style="display:inline-flex; align-items:center; gap:16px; margin-top:48px; width:max-content; cursor:pointer;">
-                            <span style="font-size:0.7rem; letter-spacing:var(--tracking-wide); text-transform:uppercase; transition:color 0.3s;">Start Dialogue</span>
-                            <span style="width:40px; height:40px; border-radius:50%; border:1px solid var(--color-border); display:flex; align-items:center; justify-content:center; transition:border-color 0.3s;">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                            </span>
-                        </a>
-                    </div>
-                </div>
-
-                <!-- 声纹分析 (full width) -->
-                <div class="glass-card" style="grid-column:span 12; padding:56px 64px; position:relative; overflow:hidden;">
-                    <div style="position:absolute; inset:0; background:linear-gradient(90deg, transparent, rgba(0,240,255,0.03), transparent); transform:translateX(-100%); transition:transform 1.5s ease-in-out;" class="card-sweep"></div>
-                    <div style="position:relative; z-index:1; display:grid; grid-template-columns:1fr; gap:48px; align-items:center;">
-                        <div>
-                            <span style="color:var(--color-white); font-size:0.6rem; letter-spacing:var(--tracking-widest); text-transform:uppercase; font-weight:600; display:block; margin-bottom:24px;">03 / Data Aesthetics</span>
-                            <h3 style="font-family:var(--font-serif); font-size:clamp(2rem, 4vw, 3.5rem); font-weight:300; margin-bottom:24px;">声纹全息切片</h3>
-                            <p style="color:var(--color-text-secondary); font-size:0.9rem; line-height:2; max-width:500px; margin-bottom:48px;">
-                                用设计的语言重塑理性的数据。通过微秒级提取声张力、节奏断点与清晰度，以极具冲击力的黑底霓虹图谱展露你声音的隐藏构造。
-                            </p>
-                            <a href="pages/analysis.html" class="btn-glow" style="padding:16px 40px;">进入分析室</a>
-                        </div>
-
-                        <!-- 极简数据可视化 -->
-                        <div style="max-width:500px; opacity:0.6; transition:opacity 0.7s;" class="data-viz">
-                            <div class="data-line">
-                                <div class="data-line-header"><span class="data-line-label">Clarity & Diction</span><span class="data-line-value">92%</span></div>
-                                <div class="data-line-track"><div class="data-line-fill" style="width:92%;"></div></div>
-                            </div>
-                            <div class="data-line">
-                                <div class="data-line-header"><span class="data-line-label">Rhythmic Tension</span><span class="data-line-value" style="color:#fff;">85%</span></div>
-                                <div class="data-line-track"><div class="data-line-fill" style="width:85%; background:#fff; box-shadow:none;"></div></div>
-                            </div>
-                            <div class="data-line">
-                                <div class="data-line-header"><span class="data-line-label">Emotional Resonance</span><span class="data-line-value" style="color:rgba(255,255,255,0.4);">78%</span></div>
-                                <div class="data-line-track"><div class="data-line-fill" style="width:78%; background:rgba(255,255,255,0.4); box-shadow:none;"></div></div>
-                            </div>
-                        </div>
+                    <div class="feature-grid">
+                        <article class="soft-card">
+                            <div class="panel-kicker">01</div>
+                            <h3 class="feature-card-title">选材书架</h3>
+                            <p class="feature-card-copy">以主题、体裁、课堂适配度组织文本，帮助教师快速备课，也帮助学习者找到适合自己的作品。</p>
+                        </article>
+                        <article class="soft-card tint-green">
+                            <div class="panel-kicker">02</div>
+                            <h3 class="feature-card-title">太白辅导</h3>
+                            <p class="feature-card-copy">AI 不作为抢眼的主角，而像一位温和的助教，在恰当时刻给出解释、朗读建议与课堂启发。</p>
+                        </article>
+                        <article class="soft-card tint-paper">
+                            <div class="panel-kicker">03</div>
+                            <h3 class="feature-card-title">练习评测</h3>
+                            <p class="feature-card-copy">评分与纠错以温和层级呈现，强调启发式反馈，而非压迫感强的“机器判定”。</p>
+                        </article>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- ====== 使用流程 Section ====== -->
-    <section class="section-border" style="padding:160px 24px; position:relative; overflow:hidden;">
-        <div class="ambient-glow" style="right:0; top:50%; opacity:0.15;"></div>
-        <div class="container-wide" style="position:relative; z-index:1;">
-            <p style="text-align:center; font-family:var(--font-sans); font-size:0.6rem; letter-spacing:var(--tracking-widest); text-transform:uppercase; color:var(--color-text-secondary); font-weight:600; margin-bottom:100px;">Workflow</p>
-
-            <div style="display:flex; flex-direction:column; gap:100px;">
-
-                <!-- 步骤 1 -->
-                <div style="display:flex; flex-wrap:wrap; align-items:center; gap:40px;" class="workflow-step">
-                    <div style="flex:0 0 auto; width:clamp(120px, 20vw, 200px); text-align:right;">
-                        <span class="text-outline" style="font-family:var(--font-serif); font-size:clamp(5rem, 12vw, 12rem); font-weight:300; line-height:1; letter-spacing:var(--tracking-tight); transition:all 0.7s;">01</span>
-                    </div>
-                    <div style="flex:1; min-width:240px; padding-left:40px; border-left:1px solid var(--color-border); position:relative;">
-                        <div style="position:absolute; left:-1px; top:0; width:2px; height:0; background:var(--color-electric); transition:height 0.7s;" class="step-line"></div>
-                        <h4 style="font-family:var(--font-serif); font-size:clamp(1.5rem, 3vw, 2.2rem); font-weight:300; margin-bottom:16px; letter-spacing:0.03em;">择定文本</h4>
-                        <p style="font-family:var(--font-sans); color:var(--color-text-secondary); font-size:0.9rem; max-width:380px; line-height:2;">游刃于高度序列化的视觉资料库中，发掘触动心智段落，确立发声基调。</p>
-                    </div>
-                </div>
-
-                <!-- 步骤 2 -->
-                <div style="display:flex; flex-wrap:wrap; align-items:center; gap:40px;" class="workflow-step">
-                    <div style="flex:0 0 auto; width:clamp(120px, 20vw, 200px); text-align:right;">
-                        <span class="text-outline" style="font-family:var(--font-serif); font-size:clamp(5rem, 12vw, 12rem); font-weight:300; line-height:1; letter-spacing:var(--tracking-tight); transition:all 0.7s;">02</span>
-                    </div>
-                    <div style="flex:1; min-width:240px; padding-left:40px; border-left:1px solid var(--color-border); position:relative;">
-                        <div style="position:absolute; left:-1px; top:0; width:2px; height:0; background:#fff; transition:height 0.7s;" class="step-line"></div>
-                        <h4 style="font-family:var(--font-serif); font-size:clamp(1.5rem, 3vw, 2.2rem); font-weight:300; margin-bottom:16px; letter-spacing:0.03em;">雕刻声浪</h4>
-                        <p style="font-family:var(--font-sans); color:var(--color-text-secondary); font-size:0.9rem; max-width:380px; line-height:2;">置身于极简的录入界面，排除一切冗杂干扰，将气息与感情注入机械的麦克风阵列。</p>
-                    </div>
-                </div>
-
-                <!-- 步骤 3 -->
-                <div style="display:flex; flex-wrap:wrap; align-items:center; gap:40px;" class="workflow-step">
-                    <div style="flex:0 0 auto; width:clamp(120px, 20vw, 200px); text-align:right;">
-                        <span class="text-outline" style="font-family:var(--font-serif); font-size:clamp(5rem, 12vw, 12rem); font-weight:300; line-height:1; letter-spacing:var(--tracking-tight); transition:all 0.7s;">03</span>
-                    </div>
-                    <div style="flex:1; min-width:240px; padding-left:40px; border-left:1px solid var(--color-border); position:relative;">
-                        <div style="position:absolute; left:-1px; top:0; width:2px; height:0; background:var(--color-electric); transition:height 0.7s;" class="step-line"></div>
-                        <h4 style="font-family:var(--font-serif); font-size:clamp(1.5rem, 3vw, 2.2rem); font-weight:300; margin-bottom:16px; letter-spacing:0.03em;">高维反馈</h4>
-                        <p style="font-family:var(--font-sans); color:var(--color-text-secondary); font-size:0.9rem; max-width:380px; line-height:2;">AI 引擎即刻折跃数据，生成优雅冷峻的全析面板，以此洞悉表达的微妙缝隙。</p>
-                    </div>
+        <section class="page-section section-border">
+            <div class="section-shell">
+                <p class="eyebrow">WORKFLOW</p>
+                <h2 class="section-title">从文本进入，从声音体会，再回到理解。</h2>
+                <p class="section-desc">保持原有的平台分页结构，但让每一个入口都像书房中的一张独立案几，各有功能，也互相呼应。</p>
+                <div class="journey-grid">
+                    <article class="journey-card soft-card">
+                        <div class="journey-index">01</div>
+                        <h3 class="journey-title">资料库</h3>
+                        <p class="journey-copy">从古诗词、现代诗与散文中筛选课堂可用文本，沉浸式阅读并快速进入练习。</p>
+                        <div style="margin-top:18px;"><a href="pages/materials.html" class="btn-secondary">进入资料库</a></div>
+                    </article>
+                    <article class="journey-card soft-card tint-green">
+                        <div class="journey-index">02</div>
+                        <h3 class="journey-title">智能助手</h3>
+                        <p class="journey-copy">向太白提出课堂设计问题、朗读困惑与文学理解需求，获取温和而有深度的回应。</p>
+                        <div style="margin-top:18px;"><a href="pages/chat.html" class="btn-secondary">打开助手</a></div>
+                    </article>
+                    <article class="journey-card soft-card tint-paper">
+                        <div class="journey-index">03</div>
+                        <h3 class="journey-title">朗读分析</h3>
+                        <p class="journey-copy">上传练习视频，获取清晰度、节奏、语调和情感等维度反馈，形成可执行的改进建议。</p>
+                        <div style="margin-top:18px;"><a href="pages/analysis.html" class="btn-secondary">查看分析页</a></div>
+                    </article>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
+    </main>
 
-    <!-- ====== Footer ====== -->
     <footer class="footer">
-        <div class="footer-glow"></div>
-        <div class="container-wide">
-            <div class="footer-cta">
-                <h2>现在，<br><span class="italic-electric">重写</span>你的发声边界。</h2>
-                <a href="pages/materials.html" class="btn-glow" style="padding:20px 56px; font-weight:600;">进入工作室</a>
+        <div class="container">
+            <div class="footer-panel">
+                <p class="eyebrow">A QUIET PLACE FOR READING</p>
+                <h2 class="footer-title">让技术藏在温度之后，<br>让朗读回到人的感受之中。</h2>
+                <p class="footer-desc">整体界面以暖白纸感、低饱和自然色与舒展留白建立氛围，适合教师长期使用，也让学习者在反复练习中保持放松、沉浸与审美愉悦。</p>
+                <div class="footer-actions">
+                    <a href="pages/materials.html" class="btn-primary">从资料库开始</a>
+                    <a href="pages/atlas.html" class="btn-secondary">查看文化地图</a>
+                </div>
             </div>
             <div class="footer-bottom">
                 <div class="footer-links">
-                    <a href="pages/materials.html">Archive</a>
-                    <a href="pages/chat.html">AI Dialogue</a>
-                    <a href="pages/analysis.html">Analysis</a>
+                    <a href="pages/materials.html">资料库</a>
+                    <a href="pages/chat.html">智能助手</a>
+                    <a href="pages/analysis.html">朗读分析</a>
+                    <a href="pages/atlas.html">文化地图</a>
                 </div>
-                <div class="footer-brand-text">智教诗途 © 2026. Made with vision.</div>
-                <div style="display:none;">Audio Aesthetics Lab.</div>
+                <div class="footer-brand-text">智教诗途 © 2026</div>
             </div>
         </div>
     </footer>
 
     <script>
-    // Navbar scroll effect
-    window.addEventListener('scroll', function() {
-        var navbar = document.getElementById('navbar');
-        if (window.scrollY > 60) {
-            navbar.classList.add('scrolled');
-        } else {
-            navbar.classList.remove('scrolled');
-        }
-    });
+        window.addEventListener('scroll', function () {
+            var navbar = document.getElementById('navbar');
+            if (window.scrollY > 8) navbar.classList.add('scrolled');
+            else navbar.classList.remove('scrolled');
+        });
 
-    // Workflow step hover: grow the vertical line
-    document.querySelectorAll('.workflow-step').forEach(function(step) {
-        step.addEventListener('mouseenter', function() {
-            var line = step.querySelector('.step-line');
-            var numSpan = step.querySelector('.text-outline');
-            if (line) line.style.height = '100%';
-            if (numSpan) {
-                numSpan.style.color = numSpan.closest('.workflow-step').querySelector('.step-line').style.background;
-                numSpan.style.webkitTextStroke = '0px';
-            }
+        document.getElementById('navToggle').addEventListener('click', function () {
+            document.getElementById('navMenu').classList.toggle('open');
         });
-        step.addEventListener('mouseleave', function() {
-            var line = step.querySelector('.step-line');
-            var numSpan = step.querySelector('.text-outline');
-            if (line) line.style.height = '0';
-            if (numSpan) {
-                numSpan.style.color = 'transparent';
-                numSpan.style.webkitTextStroke = '1px rgba(255,255,255,0.15)';
-            }
-        });
-    });
-
-    // Glass card hover: sweep animation
-    document.querySelectorAll('.glass-card').forEach(function(card) {
-        card.addEventListener('mouseenter', function() {
-            var sweep = card.querySelector('.card-sweep');
-            var viz = card.querySelector('.data-viz');
-            if (sweep) sweep.style.transform = 'translateX(100%)';
-            if (viz) viz.style.opacity = '1';
-        });
-        card.addEventListener('mouseleave', function() {
-            var sweep = card.querySelector('.card-sweep');
-            var viz = card.querySelector('.data-viz');
-            if (sweep) sweep.style.transform = 'translateX(-100%)';
-            if (viz) viz.style.opacity = '0.6';
-        });
-    });
-
-    // Responsive grid: 7/5 split on desktop
-    function updateGrid() {
-        var cards = document.querySelectorAll('#features .glass-card');
-        if (window.innerWidth >= 900 && cards.length >= 3) {
-            cards[0].style.gridColumn = 'span 7';
-            cards[1].style.gridColumn = 'span 5';
-            cards[2].style.gridColumn = 'span 12';
-        } else {
-            cards.forEach(function(c) { c.style.gridColumn = 'span 12'; });
-        }
-    }
-    updateGrid();
-    window.addEventListener('resize', updateGrid);
     </script>
 </body>
 </html>

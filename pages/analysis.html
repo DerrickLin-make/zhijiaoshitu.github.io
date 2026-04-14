@@ -3,336 +3,364 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>朗读分析 - 智教诗途</title>
-    <meta name="description" content="上传朗读视频，获得AI智能声纹分析评分和个性化改进建议。">
-    <link rel="stylesheet" href="../css/main.css">
+    <meta name="color-scheme" content="light">
+    <title>朗读分析 | 智教诗途</title>
+    <meta name="description" content="上传朗读视频，获得清晰、温和且可执行的朗读反馈。">
+    <link rel="stylesheet" href="../css/main.css?v=2">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
-        /* --- Steps --- */
-        .steps-row {
+        .intro-grid,
+        .scores-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 24px;
-            margin-bottom: 80px;
+            gap: 20px;
         }
+
+        .intro-grid {
+            grid-template-columns: repeat(3, 1fr);
+        }
+
         .step-card {
-            background: var(--color-card);
-            backdrop-filter: blur(24px);
-            border: 1px solid var(--color-border);
-            border-radius: var(--radius-xl);
-            padding: 40px 32px;
-            text-align: center;
-            transition: all var(--transition-normal);
+            border-radius: 28px;
+            padding: 24px;
         }
-        .step-card:hover {
-            background: var(--color-card-hover);
-            border-color: var(--color-border-hover);
-            transform: translateY(-4px);
-        }
+
         .step-num {
-            width: 48px; height: 48px;
-            margin: 0 auto 20px;
+            width: 44px;
+            height: 44px;
             border-radius: 50%;
-            border: 1px solid var(--color-electric-dim);
-            display: flex; align-items: center; justify-content: center;
-            font-family: var(--font-serif);
-            font-size: 1.2rem;
-            color: var(--color-electric);
-            font-weight: 300;
-        }
-        .step-title {
-            font-family: var(--font-serif);
-            font-size: 1.3rem;
-            font-weight: 400;
-            margin-bottom: 10px;
-        }
-        .step-desc {
-            font-size: 0.8rem;
-            color: var(--color-text-secondary);
-            line-height: 1.8;
-        }
-
-        /* --- Upload Area --- */
-        .upload-section {
-            background: var(--color-card);
-            backdrop-filter: blur(20px);
-            border: 1px solid var(--color-border);
-            border-radius: var(--radius-xl);
-            padding: 48px;
-            margin-bottom: 48px;
-        }
-        .upload-area {
-            border: 2px dashed rgba(255,255,255,0.08);
-            border-radius: var(--radius-xl);
-            padding: 64px 32px;
-            text-align: center;
-            cursor: pointer;
-            transition: all var(--transition-fast);
-            position: relative;
-        }
-        .upload-area:hover,
-        .upload-area.dragover {
-            border-color: var(--color-electric-dim);
-            background: rgba(0,240,255,0.02);
-        }
-        .upload-icon {
-            color: var(--color-text-muted);
-            margin-bottom: 20px;
-        }
-        .upload-text {
-            font-family: var(--font-sans);
-            font-size: 1rem;
-            font-weight: 500;
-            margin-bottom: 8px;
-        }
-        .upload-hint {
-            font-size: 0.8rem;
-            color: var(--color-text-muted);
-            margin-bottom: 24px;
-        }
-
-        /* --- File Info --- */
-        .file-info {
-            display: none;
-            background: var(--color-surface);
-            border: 1px solid var(--color-border);
-            border-radius: var(--radius-lg);
-            padding: 20px 24px;
-            margin-top: 24px;
-        }
-        .file-details {
             display: flex;
             align-items: center;
-            gap: 16px;
-            flex-wrap: wrap;
-        }
-        .file-icon-box {
-            width: 40px; height: 40px;
-            background: linear-gradient(135deg, var(--color-electric), #0080ff);
-            border-radius: var(--radius-md);
-            display: flex; align-items: center; justify-content: center;
-            font-size: 1rem;
-            color: var(--color-black);
-            flex-shrink: 0;
-        }
-        .file-meta { flex: 1; }
-        .file-name {
-            font-weight: 500;
-            font-size: 0.9rem;
-            margin-bottom: 2px;
-        }
-        .file-size {
-            font-size: 0.75rem;
-            color: var(--color-text-muted);
-        }
-        .file-actions {
-            display: flex;
-            gap: 10px;
+            justify-content: center;
+            color: var(--tea-deep);
+            background: #f5efe6;
+            font-family: var(--font-serif);
+            font-size: 1.3rem;
         }
 
-        /* --- Progress --- */
-        .upload-progress {
-            display: none;
-            margin-top: 24px;
+        .step-title {
+            margin: 18px 0 0;
+            font-family: var(--font-serif);
+            font-size: 1.7rem;
+            font-weight: 500;
         }
+
+        .step-desc {
+            margin-top: 12px;
+            color: var(--text-soft);
+            font-size: 0.92rem;
+            line-height: 1.9;
+        }
+
+        .upload-shell,
+        .result-section {
+            border: 1px solid var(--line);
+            border-radius: 30px;
+            background: rgba(255, 253, 249, 0.9);
+            box-shadow: var(--shadow-md);
+        }
+
+        .upload-shell {
+            padding: 28px;
+            margin-top: 32px;
+        }
+
+        .upload-area {
+            border: 1px dashed #d6c6b7;
+            border-radius: 28px;
+            background: linear-gradient(180deg, rgba(255,255,255,0.65), rgba(250,247,241,0.92));
+            padding: 52px 24px;
+            text-align: center;
+            transition: border-color var(--transition), background-color var(--transition);
+            cursor: pointer;
+        }
+
+        .upload-area:hover,
+        .upload-area.dragover {
+            border-color: var(--tea);
+            background: linear-gradient(180deg, rgba(255,255,255,0.8), rgba(247,242,234,0.98));
+        }
+
+        .upload-icon {
+            width: 72px;
+            height: 72px;
+            margin: 0 auto 18px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            color: var(--tea-deep);
+            background: #f5efe6;
+        }
+
+        .upload-title {
+            margin: 0;
+            font-family: var(--font-serif);
+            font-size: 2rem;
+            font-weight: 500;
+        }
+
+        .upload-copy {
+            margin-top: 10px;
+            color: var(--text-soft);
+            line-height: 1.9;
+        }
+
+        .upload-progress,
+        .file-info,
+        .analyzing-state,
+        .result-section {
+            display: none;
+        }
+
+        .upload-progress {
+            margin-top: 20px;
+        }
+
         .progress-info {
             display: flex;
             justify-content: space-between;
-            font-size: 0.75rem;
-            margin-bottom: 8px;
-            color: var(--color-text-secondary);
+            font-size: 0.9rem;
+            color: var(--text-soft);
+            margin-bottom: 10px;
         }
-        .progress-pct {
-            color: var(--color-electric);
-            font-weight: 600;
-        }
+
         .progress-track {
-            height: 2px;
-            background: var(--color-border);
-            border-radius: 1px;
+            height: 8px;
+            border-radius: 999px;
+            background: #f1e8de;
             overflow: hidden;
         }
+
         .progress-fill {
+            width: 0;
             height: 100%;
-            width: 0%;
-            background: var(--color-electric);
-            box-shadow: 0 0 10px var(--color-electric-glow);
-            transition: width 0.3s ease;
+            border-radius: 999px;
+            background: linear-gradient(90deg, var(--celadon), #bfd0c6);
+            box-shadow: 0 0 12px rgba(169, 184, 165, 0.22);
         }
 
-        /* --- Analyzing State --- */
+        .file-info {
+            margin-top: 20px;
+            border: 1px solid var(--line-soft);
+            border-radius: 22px;
+            background: rgba(255,255,255,0.82);
+            padding: 18px;
+        }
+
+        .file-details {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .file-name {
+            font-weight: 500;
+        }
+
+        .file-size {
+            color: var(--text-soft);
+            font-size: 0.9rem;
+        }
+
+        .file-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
         .analyzing-state {
-            display: none;
             text-align: center;
-            padding: 80px 24px;
-        }
-        .spinner {
-            width: 48px; height: 48px;
-            border: 2px solid var(--color-border);
-            border-top-color: var(--color-electric);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 24px;
-        }
-        @keyframes spin { to { transform: rotate(360deg); } }
-        .analyzing-text {
-            font-family: var(--font-serif);
-            font-size: 1.4rem;
-            font-weight: 300;
-            margin-bottom: 8px;
-        }
-        .analyzing-hint {
-            font-size: 0.8rem;
-            color: var(--color-text-muted);
+            padding: 56px 24px;
         }
 
-        /* --- Result Section --- */
+        .spinner {
+            width: 56px;
+            height: 56px;
+            margin: 0 auto 18px;
+            border-radius: 50%;
+            border: 3px solid #eadfd3;
+            border-top-color: var(--tea);
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .analyzing-title {
+            margin: 0;
+            font-family: var(--font-serif);
+            font-size: 2rem;
+            font-weight: 500;
+        }
+
+        .analyzing-copy {
+            margin-top: 10px;
+            color: var(--text-soft);
+        }
+
         .result-section {
-            display: none;
-            background: var(--color-card);
-            backdrop-filter: blur(20px);
-            border: 1px solid var(--color-border);
-            border-radius: var(--radius-xl);
-            padding: 56px 48px;
-            margin-top: 48px;
+            margin-top: 28px;
+            padding: 28px;
         }
-        .result-header {
+
+        .result-head {
             text-align: center;
-            margin-bottom: 56px;
         }
+
         .overall-score {
             font-family: var(--font-serif);
-            font-size: clamp(4rem, 8vw, 6rem);
-            font-weight: 300;
-            color: var(--color-electric);
+            font-size: clamp(4rem, 8vw, 5.6rem);
+            color: var(--tea-deep);
             line-height: 1;
-            margin-bottom: 8px;
-        }
-        .score-label {
-            font-size: 0.7rem;
-            letter-spacing: var(--tracking-widest);
-            text-transform: uppercase;
-            color: var(--color-text-secondary);
-            margin-bottom: 20px;
-        }
-        .score-desc {
-            font-size: 0.9rem;
-            color: var(--color-text-secondary);
-            line-height: 1.8;
-            max-width: 500px;
-            margin: 0 auto;
         }
 
-        /* Detailed scores */
+        .overall-label {
+            margin-top: 8px;
+            font-size: 12px;
+            letter-spacing: 0.3em;
+            color: var(--text-mute);
+        }
+
+        .overall-copy {
+            max-width: 680px;
+            margin: 18px auto 0;
+            color: var(--text-soft);
+            line-height: 2;
+        }
+
         .scores-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 20px;
-            margin-bottom: 48px;
+            grid-template-columns: repeat(2, 1fr);
+            margin-top: 32px;
         }
+
         .score-card {
-            background: var(--color-surface);
-            border: 1px solid var(--color-border);
-            border-radius: var(--radius-lg);
-            padding: 28px 24px;
+            border-radius: 24px;
+            padding: 20px;
         }
-        .score-category {
-            font-size: 0.65rem;
-            letter-spacing: var(--tracking-wide);
-            text-transform: uppercase;
-            color: var(--color-text-secondary);
-            margin-bottom: 12px;
+
+        .score-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            gap: 14px;
         }
+
+        .score-label {
+            color: var(--tea-deep);
+            font-size: 0.95rem;
+        }
+
         .score-value {
+            margin-top: 8px;
             font-family: var(--font-serif);
-            font-size: 2.2rem;
-            font-weight: 300;
-            color: var(--color-electric);
-            margin-bottom: 12px;
+            font-size: 2.8rem;
         }
+
+        .score-glow {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(169, 184, 165, 0.32), rgba(169, 184, 165, 0.1), transparent 72%);
+        }
+
         .score-bar {
-            height: 1px;
-            background: var(--color-border);
-            margin-bottom: 12px;
+            height: 8px;
+            border-radius: 999px;
+            background: #f1e8de;
+            margin-top: 16px;
             overflow: hidden;
         }
+
         .score-fill {
             height: 100%;
-            background: var(--color-electric);
-            box-shadow: 0 0 8px var(--color-electric-glow);
-            transition: width 1.2s var(--ease-out-expo);
-        }
-        .score-comment {
-            font-size: 0.8rem;
-            color: var(--color-text-muted);
-            line-height: 1.6;
+            border-radius: 999px;
+            background: linear-gradient(90deg, var(--celadon), #bfd0c6);
+            box-shadow: 0 0 12px rgba(169, 184, 165, 0.22);
         }
 
-        /* Suggestions */
+        .score-comment {
+            margin-top: 12px;
+            color: var(--text-soft);
+            font-size: 0.92rem;
+        }
+
         .suggestions-box {
-            background: var(--color-surface);
-            border: 1px solid var(--color-border);
-            border-radius: var(--radius-lg);
-            padding: 32px;
+            margin-top: 24px;
+            padding: 20px;
+            border-radius: 24px;
+            background: #fcf8f2;
         }
+
         .suggestions-title {
-            font-family: var(--font-sans);
-            font-size: 0.65rem;
-            letter-spacing: var(--tracking-widest);
-            text-transform: uppercase;
-            color: var(--color-electric);
-            font-weight: 600;
-            margin-bottom: 24px;
+            font-family: var(--font-serif);
+            font-size: 1.5rem;
+            font-weight: 500;
         }
+
+        .suggestion-list {
+            display: grid;
+            gap: 14px;
+            margin-top: 18px;
+        }
+
         .suggestion-item {
             display: flex;
-            gap: 16px;
-            padding: 16px 0;
-            border-bottom: 1px solid var(--color-border);
+            gap: 14px;
+            padding: 14px 0;
+            border-bottom: 1px solid rgba(232, 222, 210, 0.8);
         }
+
         .suggestion-item:last-child {
             border-bottom: none;
         }
+
         .suggestion-num {
-            width: 24px; height: 24px;
+            width: 30px;
+            height: 30px;
             border-radius: 50%;
-            border: 1px solid var(--color-electric-dim);
-            display: flex; align-items: center; justify-content: center;
-            font-size: 0.65rem;
-            color: var(--color-electric);
             flex-shrink: 0;
-            margin-top: 2px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--celadon-deep);
+            background: #eef3ec;
+            font-size: 0.82rem;
         }
-        .suggestion-text-title {
+
+        .suggestion-title {
             font-weight: 500;
-            font-size: 0.9rem;
-            margin-bottom: 4px;
         }
-        .suggestion-text-desc {
-            font-size: 0.8rem;
-            color: var(--color-text-secondary);
-            line-height: 1.7;
+
+        .suggestion-desc {
+            margin-top: 4px;
+            color: var(--text-soft);
+            font-size: 0.92rem;
+            line-height: 1.9;
         }
 
         .result-actions {
             display: flex;
-            gap: 12px;
             justify-content: center;
+            gap: 14px;
             flex-wrap: wrap;
-            margin-top: 48px;
+            margin-top: 24px;
         }
 
-        @media (max-width: 768px) {
-            .upload-section { padding: 24px; }
-            .result-section { padding: 32px 20px; }
+        @media (max-width: 980px) {
+            .intro-grid,
+            .scores-grid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 <body>
-
-    <!-- 导航栏 -->
     <nav class="navbar" id="navbar">
         <div class="nav-container">
             <div class="nav-brand">
@@ -343,125 +371,126 @@
                 <a href="materials.html" class="nav-link">资料库</a>
                 <a href="chat.html" class="nav-link">智能助手</a>
                 <a href="analysis.html" class="nav-link active">朗读分析</a>
-                <a href="atlas.html" class="nav-link">地图册</a>
+                <a href="atlas.html" class="nav-link">文化地图</a>
             </div>
-            <div class="nav-toggle" id="navToggle" onclick="document.getElementById('navMenu').classList.toggle('open')">
-                <span></span><span></span>
+            <div class="nav-toggle" id="navToggle">
+                <span></span>
+                <span></span>
             </div>
         </div>
     </nav>
 
-    <!-- 页面头部 -->
-    <header class="page-header section-border" style="padding-bottom:80px;">
-        <div class="ambient-glow" style="top:-20%; right:-10%; width:40vw; height:40vw; opacity:0.3;"></div>
-        <div class="container" style="position:relative; z-index:1;">
-            <span class="page-header-tag fade-up">Data Aesthetics</span>
-            <h1 class="page-header-title fade-up delay-100">声纹全息切片</h1>
-            <p class="page-header-desc fade-up delay-200">上传朗读视频，AI 引擎即刻解构声纹数据，生成冷峻优雅的全析面板。</p>
-        </div>
-    </header>
-
-    <!-- 主要内容 -->
-    <main style="padding:80px 0;">
-        <div class="container">
-
-            <!-- 使用步骤 -->
-            <div class="steps-row">
-                <div class="step-card">
-                    <div class="step-num">1</div>
-                    <h3 class="step-title">上传视频</h3>
-                    <p class="step-desc">选择朗读视频文件（MP4, MOV, AVI），最大 100MB</p>
-                </div>
-                <div class="step-card">
-                    <div class="step-num">2</div>
-                    <h3 class="step-title">AI 分析</h3>
-                    <p class="step-desc">提取音频、分析语音特征：清晰度、语调、节奏等多维度</p>
-                </div>
-                <div class="step-card">
-                    <div class="step-num">3</div>
-                    <h3 class="step-title">获得报告</h3>
-                    <p class="step-desc">详细分析报告与评分，附针对性改进建议</p>
-                </div>
-            </div>
-
-            <!-- 上传区域 -->
-            <div class="upload-section">
-                <div class="upload-area" id="uploadArea" onclick="triggerFileInput()">
-                    <svg class="upload-icon" width="48" height="48" viewBox="0 0 24 24" fill="none">
-                        <path d="M21 15V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V15M17 8L12 3M12 3L7 8M12 3V15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                    <div class="upload-text">点击上传或拖拽视频文件</div>
-                    <div class="upload-hint">支持 MP4, MOV, AVI 格式，最大 100MB</div>
-                    <button class="btn-glow" type="button" style="padding:12px 32px; pointer-events:none;">选择文件</button>
-                    <input type="file" id="fileInput" accept="video/*" onchange="handleFileSelect(event)" style="display:none;">
-                </div>
-
-                <!-- 上传进度 -->
-                <div class="upload-progress" id="uploadProgress">
-                    <div class="progress-info">
-                        <span>正在上传...</span>
-                        <span class="progress-pct" id="progressPct">0%</span>
-                    </div>
-                    <div class="progress-track">
-                        <div class="progress-fill" id="progressFill"></div>
+    <main class="container home-main">
+        <section class="hero-shell">
+            <div class="hero" style="align-items: stretch; grid-template-columns: 1fr 1fr; gap:40px;">
+                <div style="display:flex;flex-direction:column;justify-content:center;">
+                    <span class="page-header-tag">GENTLE ANALYTICS</span>
+                    <h1 class="page-header-title" style="font-size: 2.8rem;">安静地看见声音里的层次。</h1>
+                    <p class="page-header-desc" style="font-size:1rem;color:#6f6256;">评价不再像冰冷打分，而像一份整理有序的课堂观察记录。系统围绕清晰度、节奏与情感这三个方向给出观察，并转化为启发式的辅导卡片。</p>
+                    
+                    <div class="intro-grid" style="display:grid;gap:16px;margin-top:36px;padding-top:32px;border-top:1px solid rgba(232,222,210,0.6);">
+                        <article class="highlight-card" style="display:flex;gap:16px;align-items:center;padding:20px;border-radius:24px;background:rgba(255,255,255,0.82);box-shadow:0 12px 32px rgba(110,88,62,0.05);border:1px solid var(--line-soft);">
+                            <div class="step-num" style="color:var(--tea-deep);font-family:var(--font-serif);font-size:1.6rem;width:24px;text-align:center;">1</div>
+                            <div>
+                                <h3 class="highlight-title" style="margin:0;font-family:var(--font-serif);font-size:1.1rem;font-weight:500;">上传录制片段</h3>
+                                <p class="highlight-desc" style="margin:4px 0 0;font-size:0.9rem;color:var(--text-soft);">支持个人练习或课堂演示，接受常见的视频格式。</p>
+                            </div>
+                        </article>
+                        <article class="highlight-card" style="display:flex;gap:16px;align-items:center;padding:20px;border-radius:24px;background:#f7faf6;box-shadow:0 12px 32px rgba(110,88,62,0.05);border:1px solid var(--line-soft);">
+                            <div class="step-num" style="color:var(--tea-deep);font-family:var(--font-serif);font-size:1.6rem;width:24px;text-align:center;">2</div>
+                            <div>
+                                <h3 class="highlight-title" style="margin:0;font-family:var(--font-serif);font-size:1.1rem;font-weight:500;">获取随身反馈</h3>
+                                <p class="highlight-desc" style="margin:4px 0 0;font-size:0.9rem;color:var(--text-soft);">聚焦于表达状态优化，让每次朗读练习都能找到进步空间。</p>
+                            </div>
+                        </article>
                     </div>
                 </div>
 
-                <!-- 文件信息 -->
-                <div class="file-info" id="fileInfo">
-                    <div class="file-details">
-                        <div class="file-icon-box">🎬</div>
-                        <div class="file-meta">
-                            <div class="file-name" id="fileName"></div>
-                            <div class="file-size" id="fileSize"></div>
+                <div class="hero-panel-wrap">
+                    <div class="hero-glow"></div>
+                    <section class="upload-shell hero-panel" style="padding:0;background:rgba(255,255,255,0.85);display:flex;flex-direction:column;justify-content:center;height:100%;">
+                        <div style="padding:42px;">
+                            <div class="upload-area" id="uploadArea">
+                                <div class="upload-icon">🎙</div>
+                                <h2 class="upload-title">上传一段朗读</h2>
+                                <p class="upload-copy">支持 MP4、MOV、AVI，单个文件最大 100MB。点击下方区域或将文件拖入这里即可开始。</p>
+                                <div style="margin-top:22px;">
+                                    <button class="btn-primary" type="button">选择文件</button>
+                                </div>
+                                <input type="file" id="fileInput" accept="video/*" style="display:none;">
+                            </div>
+
+                            <div class="upload-progress" id="uploadProgress">
+                                <div class="progress-info">
+                                    <span>正在整理文件...</span>
+                                    <span id="progressPct">0%</span>
+                                </div>
+                                <div class="progress-track">
+                                    <div class="progress-fill" id="progressFill"></div>
+                                </div>
+                            </div>
+
+                            <div class="file-info" id="fileInfo">
+                                <div class="file-details">
+                                    <div>
+                                        <div class="file-name" id="fileName"></div>
+                                        <div class="file-size" id="fileSize"></div>
+                                    </div>
+                                    <div class="file-actions">
+                                        <button class="btn-primary" type="button" onclick="startAnalysis()">开始分析</button>
+                                        <button class="btn-secondary" type="button" onclick="removeFile()">移除文件</button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="file-actions">
-                            <button class="btn-solid" onclick="startAnalysis()" style="padding:10px 24px; font-size:0.7rem;">开始分析</button>
-                            <button class="btn-ghost" onclick="removeFile()" style="padding:10px 24px; font-size:0.7rem;">移除</button>
-                        </div>
-                    </div>
+                    </section>
                 </div>
             </div>
+        </section>
 
-            <!-- 分析中 -->
-            <div class="analyzing-state" id="analyzingState">
-                <div class="spinner"></div>
-                <div class="analyzing-text">正在分析你的朗读...</div>
-                <div class="analyzing-hint">这可能需要几分钟，请耐心等待</div>
+        <section class="analyzing-state" id="analyzingState">
+            <div class="spinner"></div>
+            <h2 class="analyzing-title">正在分析这段朗读</h2>
+            <p class="analyzing-copy">请稍候，我们会把结果整理成一份更容易阅读的反馈单。</p>
+        </section>
+
+        <section class="result-section hero-panel" id="resultSection">
+            <div class="result-head">
+                <div class="overall-score" id="overallScore">89</div>
+                <div class="overall-label">综合观察</div>
+                <p class="overall-copy" id="scoreDesc">整体声音状态稳定，轻柔句表现自然，适合抒情性文本。后半段个别长句略显平，建议加强语调起伏。</p>
             </div>
 
-            <!-- 分析结果 -->
-            <div class="result-section" id="resultSection">
-                <div class="result-header">
-                    <div class="overall-score" id="overallScore">85</div>
-                    <div class="score-label">综合评分</div>
-                    <div class="score-desc" id="scoreDesc">你的朗读表现良好，语音清晰度和节奏掌控都不错，但在语调变化方面还有提升空间。</div>
-                </div>
+            <div class="scores-grid" id="scoresGrid"></div>
 
-                <div class="scores-grid" id="scoresGrid"></div>
-
-                <div class="suggestions-box">
-                    <div class="suggestions-title">改进建议</div>
-                    <div id="suggestionList"></div>
-                </div>
-
-                <div class="result-actions">
-                    <button class="btn-solid" onclick="analyzeAnother()" style="padding:14px 36px;">分析其他视频</button>
-                    <button class="btn-ghost" onclick="window.print()" style="padding:14px 36px;">导出报告</button>
-                </div>
+            <div class="suggestions-box">
+                <div class="suggestions-title">进一步练习建议</div>
+                <div class="suggestion-list" id="suggestionList"></div>
             </div>
-        </div>
+
+            <div class="result-actions">
+                <button class="btn-primary" type="button" onclick="analyzeAnother()">继续分析</button>
+                <button class="btn-secondary" type="button" onclick="window.print()">导出页面</button>
+            </div>
+        </section>
     </main>
 
-    <!-- Footer -->
-    <footer class="footer" style="padding-top:80px;">
-        <div class="footer-glow"></div>
-        <div class="container-wide">
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-panel">
+                <p class="eyebrow">OBSERVE, REFINE, PRACTICE</p>
+                <h2 class="footer-title">用更柔和的方式呈现专业反馈，<br>让人愿意继续练下去。</h2>
+                <p class="footer-desc">分析页继续保留独立分页结构与上传流程，但从冷硬的“评分面板”改成更像观察记录的阅读式呈现。</p>
+                <div class="footer-actions">
+                    <a href="materials.html" class="btn-primary">回到资料库</a>
+                    <a href="atlas.html" class="btn-secondary">查看文化地图</a>
+                </div>
+            </div>
             <div class="footer-bottom">
                 <div class="footer-links">
-                    <a href="../index.html">Home</a>
-                    <a href="materials.html">Archive</a>
-                    <a href="chat.html">AI Dialogue</a>
+                    <a href="../index.html">首页</a>
+                    <a href="materials.html">资料库</a>
+                    <a href="chat.html">智能助手</a>
                 </div>
                 <div class="footer-brand-text">智教诗途 © 2026</div>
             </div>
@@ -469,154 +498,169 @@
     </footer>
 
     <script>
-    // Navbar scroll
-    window.addEventListener('scroll', function() {
-        var navbar = document.getElementById('navbar');
-        if (window.scrollY > 60) navbar.classList.add('scrolled');
-        else navbar.classList.remove('scrolled');
-    });
-
-    var currentFile = null;
-
-    // Upload area drag events
-    (function() {
-        var area = document.getElementById('uploadArea');
-        area.addEventListener('dragover', function(e) { e.preventDefault(); area.classList.add('dragover'); });
-        area.addEventListener('dragleave', function(e) { e.preventDefault(); area.classList.remove('dragover'); });
-        area.addEventListener('drop', function(e) {
-            e.preventDefault();
-            area.classList.remove('dragover');
-            if (e.dataTransfer.files.length > 0) handleFile(e.dataTransfer.files[0]);
+        window.addEventListener('scroll', function () {
+            var navbar = document.getElementById('navbar');
+            if (window.scrollY > 8) navbar.classList.add('scrolled');
+            else navbar.classList.remove('scrolled');
         });
-    })();
 
-    function triggerFileInput() {
-        document.getElementById('fileInput').click();
-    }
+        document.getElementById('navToggle').addEventListener('click', function () {
+            document.getElementById('navMenu').classList.toggle('open');
+        });
 
-    function handleFileSelect(event) {
-        if (event.target.files[0]) handleFile(event.target.files[0]);
-    }
+        var currentFile = null;
+        var uploadArea = document.getElementById('uploadArea');
+        var fileInput = document.getElementById('fileInput');
 
-    function handleFile(file) {
-        if (!file.type.startsWith('video/')) { alert('请选择视频文件'); return; }
-        var MAX_SIZE = 100 * 1024 * 1024;
-        if (file.size > MAX_SIZE) { alert('文件大小不能超过100MB'); return; }
-        currentFile = file;
-        document.getElementById('fileName').textContent = file.name;
-        document.getElementById('fileSize').textContent = formatSize(file.size);
-        document.getElementById('fileInfo').style.display = 'block';
-        simulateUpload();
-    }
+        uploadArea.addEventListener('click', function () {
+            fileInput.click();
+        });
 
-    function formatSize(bytes) {
-        if (bytes === 0) return '0 B';
-        var k = 1024;
-        var sizes = ['B', 'KB', 'MB', 'GB'];
-        var i = Math.floor(Math.log(bytes) / Math.log(k));
-        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-    }
+        uploadArea.addEventListener('dragover', function (event) {
+            event.preventDefault();
+            uploadArea.classList.add('dragover');
+        });
 
-    function simulateUpload() {
-        var prog = document.getElementById('uploadProgress');
-        var fill = document.getElementById('progressFill');
-        var pct = document.getElementById('progressPct');
-        prog.style.display = 'block';
-        var p = 0;
-        var iv = setInterval(function() {
-            p += Math.random() * 15;
-            if (p > 100) p = 100;
-            fill.style.width = p + '%';
-            pct.textContent = Math.round(p) + '%';
-            if (p >= 100) {
-                clearInterval(iv);
-                setTimeout(function() { prog.style.display = 'none'; }, 500);
+        uploadArea.addEventListener('dragleave', function (event) {
+            event.preventDefault();
+            uploadArea.classList.remove('dragover');
+        });
+
+        uploadArea.addEventListener('drop', function (event) {
+            event.preventDefault();
+            uploadArea.classList.remove('dragover');
+            if (event.dataTransfer.files[0]) handleFile(event.dataTransfer.files[0]);
+        });
+
+        fileInput.addEventListener('change', function (event) {
+            if (event.target.files[0]) handleFile(event.target.files[0]);
+        });
+
+        function handleFile(file) {
+            if (!file.type.startsWith('video/')) {
+                alert('请选择视频文件');
+                return;
             }
-        }, 200);
-    }
+            if (file.size > 100 * 1024 * 1024) {
+                alert('文件大小不能超过 100MB');
+                return;
+            }
+            currentFile = file;
+            document.getElementById('fileName').textContent = file.name;
+            document.getElementById('fileSize').textContent = formatSize(file.size);
+            document.getElementById('fileInfo').style.display = 'block';
+            simulateUpload();
+        }
 
-    function removeFile() {
-        currentFile = null;
-        document.getElementById('fileInfo').style.display = 'none';
-        document.getElementById('fileInput').value = '';
-        document.getElementById('resultSection').style.display = 'none';
-        document.getElementById('analyzingState').style.display = 'none';
-    }
+        function formatSize(bytes) {
+            if (bytes === 0) return '0 B';
+            var unit = ['B', 'KB', 'MB', 'GB'];
+            var index = Math.floor(Math.log(bytes) / Math.log(1024));
+            return (bytes / Math.pow(1024, index)).toFixed(2) + ' ' + unit[index];
+        }
 
-    function startAnalysis() {
-        if (!currentFile) { alert('请先选择文件'); return; }
-        document.getElementById('resultSection').style.display = 'none';
-        document.getElementById('analyzingState').style.display = 'block';
-        document.getElementById('analyzingState').scrollIntoView({ behavior: 'smooth' });
-        setTimeout(function() {
+        function simulateUpload() {
+            var progress = document.getElementById('uploadProgress');
+            var fill = document.getElementById('progressFill');
+            var pct = document.getElementById('progressPct');
+            var value = 0;
+            progress.style.display = 'block';
+            var timer = setInterval(function () {
+                value += Math.random() * 16;
+                if (value > 100) value = 100;
+                fill.style.width = value + '%';
+                pct.textContent = Math.round(value) + '%';
+                if (value >= 100) {
+                    clearInterval(timer);
+                    setTimeout(function () {
+                        progress.style.display = 'none';
+                    }, 500);
+                }
+            }, 180);
+        }
+
+        function removeFile() {
+            currentFile = null;
+            fileInput.value = '';
+            document.getElementById('fileInfo').style.display = 'none';
+            document.getElementById('uploadProgress').style.display = 'none';
+            document.getElementById('resultSection').style.display = 'none';
             document.getElementById('analyzingState').style.display = 'none';
-            showResult();
-        }, 4000);
-    }
+        }
 
-    function showResult() {
-        var data = generateMockData();
-        document.getElementById('overallScore').textContent = data.overall;
-        document.getElementById('scoreDesc').textContent = data.desc;
+        function startAnalysis() {
+            if (!currentFile) {
+                alert('请先选择文件');
+                return;
+            }
+            document.getElementById('resultSection').style.display = 'none';
+            document.getElementById('analyzingState').style.display = 'block';
+            document.getElementById('analyzingState').scrollIntoView({ behavior: 'smooth' });
+            setTimeout(function () {
+                document.getElementById('analyzingState').style.display = 'none';
+                showResult();
+            }, 3200);
+        }
 
-        document.getElementById('scoresGrid').innerHTML = data.scores.map(function(s) {
-            return '<div class="score-card">' +
-                '<div class="score-category">' + s.cat + '</div>' +
-                '<div class="score-value">' + s.val + '</div>' +
-                '<div class="score-bar"><div class="score-fill" style="width:' + s.val + '%;"></div></div>' +
-                '<div class="score-comment">' + s.comment + '</div>' +
-            '</div>';
-        }).join('');
+        function generateMockData() {
+            var clarity = 78 + Math.floor(Math.random() * 18);
+            var intonation = 72 + Math.floor(Math.random() * 18);
+            var rhythm = 76 + Math.floor(Math.random() * 18);
+            var emotion = 70 + Math.floor(Math.random() * 20);
+            var overall = Math.round((clarity + intonation + rhythm + emotion) / 4);
+            return {
+                overall: overall,
+                desc: '这段朗读的整体完成度为 ' + overall + ' 分。声音状态较稳，节奏组织良好，但在抒情句的语调起伏和尾音处理上仍有进一步提升空间。',
+                scores: [
+                    { cat: '吐字清晰', val: clarity, comment: '字头与收音整体清楚，表达具有干净度。' },
+                    { cat: '语调变化', val: intonation, comment: '语调层次自然，但重点句还可更有起伏。' },
+                    { cat: '节奏层次', val: rhythm, comment: '停连关系较清晰，段落感较稳定。' },
+                    { cat: '情感投入', val: emotion, comment: '情感基调到位，部分句子可以更有余韵。' }
+                ],
+                suggestions: [
+                    { title: '加强重点句起伏', desc: '可在关键词与句末适度拉开语调高低，让抒情句层次更明显。' },
+                    { title: '留出更从容的停顿', desc: '在长句与意象转换处稍作停顿，让听者有进入画面的空间。' },
+                    { title: '优化尾音处理', desc: '收句不急于落下，适度延长尾音，会让表达更柔和也更有余韵。' }
+                ]
+            };
+        }
 
-        document.getElementById('suggestionList').innerHTML = data.suggestions.map(function(s, i) {
-            return '<div class="suggestion-item">' +
-                '<div class="suggestion-num">' + (i + 1) + '</div>' +
-                '<div><div class="suggestion-text-title">' + s.title + '</div>' +
-                '<div class="suggestion-text-desc">' + s.desc + '</div></div></div>';
-        }).join('');
+        function showResult() {
+            var data = generateMockData();
+            document.getElementById('overallScore').textContent = data.overall;
+            document.getElementById('scoreDesc').textContent = data.desc;
 
-        document.getElementById('resultSection').style.display = 'block';
-        document.getElementById('resultSection').scrollIntoView({ behavior: 'smooth' });
+            document.getElementById('scoresGrid').innerHTML = data.scores.map(function (item) {
+                return '' +
+                    '<article class="score-card surface-card">' +
+                        '<div class="score-head">' +
+                            '<div><div class="score-label">' + item.cat + '</div><div class="score-value">' + item.val + '</div></div>' +
+                            '<div class="score-glow"></div>' +
+                        '</div>' +
+                        '<div class="score-bar"><div class="score-fill" style="width:' + item.val + '%"></div></div>' +
+                        '<div class="score-comment">' + item.comment + '</div>' +
+                    '</article>';
+            }).join('');
 
-        // Animate score bars
-        setTimeout(function() {
-            document.querySelectorAll('.score-fill').forEach(function(el) {
-                var w = el.style.width;
-                el.style.width = '0%';
-                setTimeout(function() { el.style.width = w; }, 100);
-            });
-        }, 300);
-    }
+            document.getElementById('suggestionList').innerHTML = data.suggestions.map(function (item, index) {
+                return '' +
+                    '<div class="suggestion-item">' +
+                        '<div class="suggestion-num">' + (index + 1) + '</div>' +
+                        '<div>' +
+                            '<div class="suggestion-title">' + item.title + '</div>' +
+                            '<div class="suggestion-desc">' + item.desc + '</div>' +
+                        '</div>' +
+                    '</div>';
+            }).join('');
 
-    function analyzeAnother() {
-        removeFile();
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
+            document.getElementById('resultSection').style.display = 'block';
+            document.getElementById('resultSection').scrollIntoView({ behavior: 'smooth' });
+        }
 
-    function generateMockData() {
-        var clarity = 78 + Math.floor(Math.random() * 17);
-        var intonation = 70 + Math.floor(Math.random() * 20);
-        var rhythm = 75 + Math.floor(Math.random() * 20);
-        var emotion = 65 + Math.floor(Math.random() * 25);
-        var overall = Math.round((clarity + intonation + rhythm + emotion) / 4);
-        return {
-            overall: overall,
-            desc: '你的朗读综合评分为 ' + overall + ' 分。语音清晰度' + (clarity >= 85 ? '表现出色' : '尚有提升空间') + '，' +
-                  '节奏掌控' + (rhythm >= 85 ? '非常好' : '需要加强') + '。继续保持练习！',
-            scores: [
-                { cat: 'Clarity & Diction', val: clarity, comment: '语音清晰度与吐字准确性评估' },
-                { cat: 'Intonation', val: intonation, comment: '语调变化的丰富程度与自然度' },
-                { cat: 'Rhythmic Control', val: rhythm, comment: '停顿、节奏掌控与段落感' },
-                { cat: 'Emotional Depth', val: emotion, comment: '情感表达的饱满度与感染力' }
-            ],
-            suggestions: [
-                { title: '增强语调起伏', desc: '尝试在关键词和句末增加更多的语调变化，使朗读更具层次感和表现力。' },
-                { title: '优化停顿节奏', desc: '在逗号和句号处注意适当停顿，给听者留出理解和感受的空间。' },
-                { title: '深化情感投入', desc: '理解文本的情感内核，将自己代入文本情境，让声音传递出更深层的情感。' },
-                { title: '控制呼吸节奏', desc: '保持稳定的呼吸，避免在长句中出现气息不足，影响朗读的流畅度。' }
-            ]
-        };
-    }
+        function analyzeAnother() {
+            removeFile();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
     </script>
 </body>
 </html>
