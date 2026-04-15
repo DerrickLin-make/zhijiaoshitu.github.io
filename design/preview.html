@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>智教诗途 · 新版视觉预览</title>
+    <meta name="description" content="智教诗途新版网页视觉预览，面向教师与有审美追求的诗词学习者。">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --paper: #fdfbf7;
+            --paper-soft: #faf7f1;
+            --line: #e8ded2;
+            --line-soft: #eee4d8;
+            --text: #4a4036;
+            --text-soft: #7b6f62;
+            --text-mute: #a28d77;
+            --tea: #b79d7d;
+            --tea-deep: #8e7356;
+            --celadon: #a9b8a5;
+            --celadon-deep: #6f8671;
+            --shadow-sm: 0 8px 24px rgba(110, 88, 62, 0.06);
+            --shadow-md: 0 14px 38px rgba(110, 88, 62, 0.06);
+            --shadow-lg: 0 18px 50px rgba(110, 88, 62, 0.08);
+            --transition: 0.28s ease;
+        }
+
+        * { box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            margin: 0;
+            font-family: "Noto Sans SC", sans-serif;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(183, 157, 125, 0.12), transparent 28%),
+                radial-gradient(circle at 85% 10%, rgba(169, 184, 165, 0.16), transparent 22%),
+                linear-gradient(180deg, var(--paper) 0%, var(--paper-soft) 100%);
+            line-height: 1.75;
+        }
+
+        a { color: inherit; text-decoration: none; }
+        button { font: inherit; border: none; background: none; cursor: pointer; }
+        .serif { font-family: "Noto Serif SC", serif; }
+        .page-shell { max-width: 1240px; margin: 0 auto; padding: 0 20px; }
+
+        .site-header {
+            position: sticky;
+            top: 0;
+            z-index: 30;
+            backdrop-filter: blur(18px);
+            background: rgba(253, 251, 247, 0.9);
+            border-bottom: 1px solid rgba(232, 222, 210, 0.85);
+        }
+
+        .header-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            padding: 18px 0;
+        }
+
+        .brand-title {
+            margin: 0;
+            font-size: 28px;
+            letter-spacing: 0.18em;
+            font-weight: 500;
+        }
+
+        .brand-subtitle {
+            margin-top: 4px;
+            font-size: 11px;
+            color: var(--text-mute);
+            letter-spacing: 0.28em;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 32px;
+            color: #6f6256;
+            font-size: 14px;
+        }
+
+        .nav-links a,
+        .header-btn,
+        .hero-primary,
+        .hero-secondary,
+        .cta-primary,
+        .cta-secondary,
+        .chat-send,
+        .filter-btn,
+        .material-card {
+            transition:
+                background-color var(--transition),
+                color var(--transition),
+                border-color var(--transition),
+                transform var(--transition),
+                box-shadow var(--transition);
+        }
+
+        .nav-links a:hover { color: var(--tea-deep); }
+
+        .header-btn,
+        .hero-secondary,
+        .cta-secondary {
+            border: 1px solid #d7c7b7;
+            background: rgba(255, 255, 255, 0.72);
+            color: #6f6256;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .header-btn:hover,
+        .hero-secondary:hover,
+        .cta-secondary:hover {
+            border-color: var(--tea);
+            color: var(--tea-deep);
+            transform: translateY(-1px);
+        }
+
+        .header-btn,
+        .hero-primary,
+        .hero-secondary,
+        .cta-primary,
+        .cta-secondary {
+            padding: 11px 22px;
+            border-radius: 999px;
+            font-size: 14px;
+            letter-spacing: 0.12em;
+        }
+
+        .hero-primary,
+        .cta-primary {
+            background: var(--tea-deep);
+            color: #fffdf9;
+            box-shadow: 0 14px 32px rgba(142, 115, 86, 0.18);
+        }
+
+        .hero-primary:hover,
+        .cta-primary:hover {
+            transform: translateY(-1px);
+            background: #7e654b;
+        }
+
+        .hero {
+            display: grid;
+            grid-template-columns: 1.15fr 0.85fr;
+            gap: 40px;
+            align-items: center;
+            padding: 56px 0 92px;
+        }
+
+        .eyebrow,
+        .section-eyebrow,
+        .panel-kicker,
+        .soft-card-index,
+        .material-tip-title {
+            font-size: 12px;
+            letter-spacing: 0.28em;
+            color: var(--tea-deep);
+        }
+
+        .eyebrow { margin: 0 0 18px; letter-spacing: 0.36em; }
+
+        .hero-title {
+            margin: 0;
+            font-size: clamp(44px, 7vw, 74px);
+            line-height: 1.18;
+            font-weight: 500;
+        }
+
+        .hero-desc {
+            max-width: 720px;
+            margin: 28px 0 0;
+            font-size: 18px;
+            line-height: 2;
+            color: #6f6256;
+        }
+
+        .hero-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin-top: 34px;
+        }
+
+        .hero-highlights {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-top: 42px;
+        }
+
+        .highlight-card,
+        .soft-card,
+        .material-card,
+        .score-card,
+        .stat-card {
+            border: 1px solid var(--line-soft);
+            background: rgba(255, 255, 255, 0.76);
+            box-shadow: 0 12px 32px rgba(110, 88, 62, 0.05);
+        }
+
+        .highlight-card { border-radius: 20px; padding: 18px; }
+        .highlight-title { margin: 0; font-size: 21px; font-weight: 500; }
+        .highlight-desc { margin: 8px 0 0; font-size: 14px; color: var(--text-soft); line-height: 1.8; }
+
+        .hero-panel-wrap { position: relative; }
+        .hero-glow {
+            position: absolute;
+            inset: 36px;
+            border-radius: 32px;
+            opacity: 0.74;
+            filter: blur(40px);
+            background: radial-gradient(circle, rgba(183, 157, 125, 0.2) 0%, rgba(169, 184, 165, 0.12) 48%, transparent 75%);
+        }
+
+        .hero-panel,
+        .assistant-info,
+        .assistant-chat,
+        .feedback-sheet,
+        .atlas-panel {
+            position: relative;
+            border: 1px solid var(--line);
+            border-radius: 30px;
+            box-shadow: var(--shadow-md);
+        }
+
+        .hero-panel {
+            overflow: hidden;
+            background: rgba(255, 253, 249, 0.92);
+            padding: 28px;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .hero-panel-top,
+        .chat-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 16px;
+        }
+
+        .panel-title,
+        .soft-card-title,
+        .assistant-title,
+        .chat-name,
+        .material-title {
+            font-weight: 500;
+        }
+
+        .panel-title { margin: 10px 0 0; font-size: 34px; line-height: 1.35; }
+        .soft-pill, .status-pill { padding: 7px 12px; border-radius: 999px; font-size: 12px; white-space: nowrap; }
+        .soft-pill { color: var(--celadon-deep); background: #eef3ec; box-shadow: 0 0 18px rgba(169, 184, 165, 0.18); }
+
+        .panel-block {
+            border-radius: 20px;
+            background: var(--paper-soft);
+            padding: 20px;
+            margin-top: 28px;
+        }
+
+        .panel-row {
+            display: grid;
+            grid-template-columns: 0.9fr 1.1fr;
+            gap: 16px;
+            margin-top: 16px;
+        }
+
+        .panel-card {
+            border-radius: 20px;
+            border: 1px solid #ece2d7;
+            background: #fff;
+            padding: 20px;
+        }
+
+        .panel-card.soft {
+            border-color: #e7dfd5;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.86), rgba(250, 247, 241, 0.9));
+        }
+
+        .panel-text { margin: 14px 0 0; font-size: 14px; color: #6f6256; line-height: 2; }
+        .score-number { font-size: 54px; color: var(--tea-deep); margin: 10px 0 0; }
+        .score-note { margin-top: 4px; font-size: 14px; color: var(--text-soft); }
+        .score-orb {
+            width: 112px;
+            height: 64px;
+            border-radius: 20px;
+            background: radial-gradient(circle at 50% 50%, rgba(175, 192, 200, 0.24), rgba(255, 255, 255, 0.1), transparent 72%);
+        }
+
+        .section { padding: 88px 0; border-top: 1px solid var(--line); }
+        .section-grid { display: grid; grid-template-columns: 1fr 2fr; gap: 32px; }
+        .section-title { margin: 0; font-size: clamp(32px, 5vw, 52px); line-height: 1.35; font-weight: 500; }
+        .section-desc { margin: 18px 0 0; max-width: 700px; font-size: 16px; color: var(--text-soft); line-height: 2; }
+
+        .soft-card-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+        .soft-card { padding: 24px; border-radius: 28px; }
+        .soft-card:nth-child(2) { background: #f7faf6; }
+        .soft-card:nth-child(3) { background: #faf7f1; }
+        .soft-card-title { margin: 16px 0 0; font-size: 28px; }
+        .soft-card-desc { margin: 14px 0 0; color: #6f6256; font-size: 14px; line-height: 2; }
+
+        .materials-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
+        .filters { display: flex; flex-wrap: wrap; gap: 10px; }
+        .filter-btn {
+            padding: 10px 18px;
+            border-radius: 999px;
+            border: 1px solid #ded2c5;
+            background: rgba(255, 255, 255, 0.75);
+            color: #6f6256;
+            font-size: 14px;
+        }
+
+        .filter-btn:hover { border-color: var(--tea); color: var(--tea-deep); }
+        .filter-btn.active {
+            border-color: transparent;
+            background: var(--tea-deep);
+            color: #fffdf9;
+            box-shadow: 0 12px 24px rgba(142, 115, 86, 0.14);
+        }
+
+        .materials-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; margin-top: 42px; }
+        .material-card { border-radius: 26px; padding: 24px; }
+        .material-card:hover { transform: translateY(-4px); box-shadow: 0 16px 42px rgba(110, 88, 62, 0.08); }
+        .material-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+        .level-pill { padding: 6px 12px; border-radius: 999px; background: #f5efe6; color: var(--tea-deep); font-size: 12px; }
+        .author { font-size: 12px; color: #a89a8a; letter-spacing: 0.22em; }
+        .material-title { margin: 20px 0 0; font-size: 34px; }
+        .material-excerpt { margin: 14px 0 0; font-size: 14px; color: #6f6256; line-height: 2; }
+        .material-tip { margin-top: 24px; padding: 16px; border-radius: 18px; background: var(--paper-soft); }
+        .material-tip-text { margin-top: 10px; font-size: 14px; color: var(--text-soft); line-height: 1.9; }
+        .material-link { display: inline-block; margin-top: 20px; color: var(--tea-deep); font-size: 14px; }
+
+        .assistant-layout, .analysis-layout, .atlas-layout { display: grid; gap: 32px; }
+        .assistant-layout { grid-template-columns: 0.95fr 1.05fr; }
+        .analysis-layout { grid-template-columns: 1.05fr 0.95fr; }
+        .atlas-layout { grid-template-columns: 0.92fr 1.08fr; }
+
+        .assistant-info, .atlas-panel { background: rgba(255, 253, 249, 0.86); padding: 28px; }
+        .assistant-chat { background: rgba(255, 255, 255, 0.84); padding: 22px 22px 24px; }
+        .assistant-title { margin: 14px 0 0; font-size: 42px; line-height: 1.4; }
+        .assistant-desc { margin: 18px 0 0; font-size: 15px; color: #6f6256; line-height: 2; }
+        .assistant-list { display: grid; gap: 14px; margin-top: 28px; }
+        .assistant-item { display: flex; align-items: center; gap: 12px; padding: 14px 16px; border-radius: 18px; background: #f8f3ec; color: #6f6256; font-size: 14px; }
+        .assistant-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--celadon); box-shadow: 0 0 14px rgba(169, 184, 165, 0.35); flex-shrink: 0; }
+        .chat-top { padding-bottom: 18px; border-bottom: 1px solid #efe4d8; }
+        .chat-name { font-size: 29px; margin: 0; }
+        .chat-role { margin-top: 4px; font-size: 14px; color: var(--tea-deep); }
+        .status-pill { background: #eef3ec; color: var(--celadon-deep); }
+        .chat-messages { display: grid; gap: 16px; padding: 24px 0; }
+        .bubble { max-width: 82%; padding: 16px 18px; border-radius: 22px; font-size: 14px; line-height: 2; }
+        .bubble.user { background: #f7f1e9; color: #5f5245; border-bottom-left-radius: 10px; }
+        .bubble.assistant { margin-left: auto; max-width: 88%; background: #fffefc; color: #6a5c4e; border: 1px solid #e7ddd2; border-bottom-right-radius: 10px; box-shadow: 0 10px 24px rgba(110, 88, 62, 0.04); }
+        .chat-composer { display: flex; align-items: center; gap: 12px; border: 1px solid var(--line); background: #fcfaf6; border-radius: 24px; padding: 14px; }
+        .chat-input { flex: 1; border: none; outline: none; background: transparent; color: #a09181; font-size: 14px; }
+        .chat-send { padding: 9px 18px; border-radius: 999px; background: var(--celadon); color: #fff; font-size: 14px; box-shadow: 0 0 18px rgba(169, 184, 165, 0.25); }
+        .chat-send:hover { transform: translateY(-1px); background: #96a994; }
+
+        .scores-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-top: 40px; }
+        .score-card { padding: 20px; border-radius: 24px; }
+        .score-card-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 14px; }
+        .score-label { font-size: 14px; color: var(--tea-deep); }
+        .score-value { margin-top: 8px; font-size: 44px; font-weight: 500; }
+        .score-glow { width: 48px; height: 48px; border-radius: 50%; background: radial-gradient(circle, rgba(169, 184, 165, 0.32), rgba(169, 184, 165, 0.1), transparent 72%); }
+        .score-bar { height: 8px; border-radius: 999px; background: #f1e8de; margin-top: 16px; overflow: hidden; }
+        .score-fill { height: 100%; border-radius: 999px; background: linear-gradient(90deg, var(--celadon), #bfd0c6); box-shadow: 0 0 12px rgba(169, 184, 165, 0.22); }
+        .score-card-note { margin-top: 12px; font-size: 14px; color: var(--text-soft); }
+
+        .feedback-sheet { background: linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(247, 241, 233, 0.85)); padding: 28px; }
+        .feedback-block { margin-top: 24px; padding: 20px; border-radius: 24px; background: rgba(255, 255, 255, 0.78); }
+        .feedback-text { font-size: 14px; line-height: 2; color: #6f6256; }
+        .feedback-list { display: grid; gap: 14px; margin-top: 24px; }
+        .feedback-item { display: flex; gap: 14px; padding: 16px; border-radius: 20px; background: #fcf8f2; }
+        .feedback-index { width: 32px; height: 32px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; border-radius: 50%; background: #eef3ec; color: var(--celadon-deep); font-size: 12px; }
+        .feedback-item-title { font-size: 14px; color: var(--tea-deep); }
+        .feedback-item-desc { margin-top: 3px; font-size: 14px; color: #6f6256; }
+
+        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 30px; }
+        .stat-card { text-align: center; border-radius: 24px; padding: 20px; }
+        .stat-value { margin: 0; font-size: 42px; font-weight: 500; color: var(--tea-deep); }
+        .stat-label { margin-top: 8px; font-size: 14px; color: var(--text-soft); }
+
+        .atlas-panel { padding: 24px; }
+        .atlas-canvas {
+            position: relative;
+            aspect-ratio: 4 / 3;
+            overflow: hidden;
+            border-radius: 28px;
+            border: 1px solid var(--line-soft);
+            background: linear-gradient(180deg, #faf7f1 0%, #f6f0e7 100%);
+        }
+
+        .atlas-canvas::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(circle at 20% 20%, rgba(175, 192, 200, 0.12), transparent 28%),
+                radial-gradient(circle at 70% 30%, rgba(169, 184, 165, 0.18), transparent 24%),
+                linear-gradient(180deg, transparent, rgba(183, 157, 125, 0.06));
+        }
+
+        .atlas-outline,
+        .atlas-outline-two {
+            position: absolute;
+            border: 1px solid rgba(217, 206, 192, 0.9);
+            opacity: 0.78;
+        }
+
+        .atlas-outline { inset: 10%; border-radius: 40% 48% 45% 42%; }
+        .atlas-outline-two { inset: 18%; border-radius: 44% 38% 42% 36%; border-color: rgba(226, 215, 202, 0.95); }
+        .map-point { position: absolute; transform: translate(-50%, -50%); }
+        .map-dot-wrap { position: relative; }
+        .map-dot-glow { position: absolute; inset: 0; border-radius: 50%; background: rgba(169, 184, 165, 0.3); filter: blur(10px); }
+        .map-dot { position: relative; width: 14px; height: 14px; border-radius: 50%; background: var(--tea-deep); border: 2px solid #fff; }
+        .map-label { min-width: 112px; margin-top: 10px; padding: 10px 12px; border-radius: 16px; background: rgba(255, 255, 255, 0.92); box-shadow: 0 10px 20px rgba(110, 88, 62, 0.05); font-size: 12px; line-height: 1.7; color: #6f6256; }
+        .map-label-city { color: var(--tea-deep); }
+
+        .closing-section { padding: 44px 0 70px; }
+        .closing-card { text-align: center; border-radius: 36px; border: 1px solid var(--line); background: linear-gradient(180deg, rgba(255, 253, 249, 0.94), rgba(248, 242, 233, 0.9)); padding: 42px 28px; box-shadow: 0 18px 46px rgba(110, 88, 62, 0.06); }
+        .closing-title { margin: 18px 0 0; font-size: clamp(36px, 5vw, 60px); line-height: 1.34; font-weight: 500; }
+        .closing-desc { max-width: 760px; margin: 22px auto 0; font-size: 15px; color: #6f6256; line-height: 2; }
+        .closing-actions { display: flex; justify-content: center; flex-wrap: wrap; gap: 16px; margin-top: 28px; }
+
+        @media (max-width: 1100px) {
+            .hero, .assistant-layout, .analysis-layout, .atlas-layout, .section-grid, .soft-card-grid { grid-template-columns: 1fr; }
+            .materials-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        @media (max-width: 820px) {
+            .nav-links { display: none; }
+            .hero-highlights, .panel-row, .scores-grid, .stats-grid, .materials-grid { grid-template-columns: 1fr; }
+            .header-inner { padding: 14px 0; }
+            .hero { padding: 40px 0 64px; }
+            .section, .closing-section { padding-top: 64px; padding-bottom: 64px; }
+            .hero-panel, .assistant-info, .assistant-chat, .feedback-sheet, .atlas-panel { padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+    <header class="site-header">
+        <div class="page-shell header-inner">
+            <div>
+                <h1 class="brand-title serif">智教诗途</h1>
+                <div class="brand-subtitle">POETRY STUDIO</div>
+            </div>
+            <nav class="nav-links">
+                <a href="#materials">资料库</a>
+                <a href="#assistant">智能助手</a>
+                <a href="#analysis">朗读分析</a>
+                <a href="#atlas">文化地图</a>
+            </nav>
+            <button class="header-btn">进入书房</button>
+        </div>
+    </header>
+
+    <main class="page-shell">
+        <section class="hero">
+            <div>
+                <p class="eyebrow">HIGH AESTHETICS · AI ASSISTED</p>
+                <h2 class="hero-title serif">在温润书卷气里，<br>重新学习朗读。</h2>
+                <p class="hero-desc">
+                    为教师与审美型学习者打造的诗词朗读平台。这里不强调冰冷的技术界面，而是将 AI 辅导、文本解析与声音评测，
+                    安放进一个像午后书房般松弛、安静、可沉浸的阅读空间。
+                </p>
+                <div class="hero-actions">
+                    <button class="hero-primary">浏览朗读材料</button>
+                    <button class="hero-secondary">体验 AI 辅导</button>
+                </div>
+                <div class="hero-highlights">
+                    <article class="highlight-card">
+                        <h3 class="highlight-title serif">课堂适配</h3>
+                        <p class="highlight-desc">面向教师备课与示范朗读。</p>
+                    </article>
+                    <article class="highlight-card">
+                        <h3 class="highlight-title serif">审美导向</h3>
+                        <p class="highlight-desc">强调留白、节奏与文本气质。</p>
+                    </article>
+                    <article class="highlight-card">
+                        <h3 class="highlight-title serif">温和智能</h3>
+                        <p class="highlight-desc">AI 反馈克制呈现，不喧宾夺主。</p>
+                    </article>
+                </div>
+            </div>
+
+            <div class="hero-panel-wrap">
+                <div class="hero-glow"></div>
+                <section class="hero-panel">
+                    <div class="hero-panel-top">
+                        <div>
+                            <div class="panel-kicker">朗读概览</div>
+                            <h3 class="panel-title serif">一页之内，看见文本、声音与情绪。</h3>
+                        </div>
+                        <span class="soft-pill">柔和 AI 提示</span>
+                    </div>
+
+                    <div class="panel-block">
+                        <div style="display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;">
+                            <div>
+                                <div style="font-size:14px;color:#8e7356;">本周课堂建议</div>
+                                <div class="serif" style="margin-top:8px;font-size:30px;">《黄鹤楼送孟浩然之广陵》</div>
+                            </div>
+                            <div style="padding:14px 16px;border-radius:18px;background:#fff;box-shadow:var(--shadow-sm);text-align:right;">
+                                <div style="font-size:12px;color:#a28d77;">适配学段</div>
+                                <div style="margin-top:4px;font-size:14px;">初中 / 高中</div>
+                            </div>
+                        </div>
+                        <p class="panel-text">故人西辞黄鹤楼，烟花三月下扬州。孤帆远影碧空尽，唯见长江天际流。</p>
+                    </div>
+
+                    <div class="panel-row">
+                        <div class="panel-card">
+                            <div class="panel-kicker">AI 朗读提示</div>
+                            <ul class="panel-text" style="padding-left:18px;margin-top:10px;">
+                                <li>起句宜明净，不宜过重。</li>
+                                <li>“孤帆远影”需留出目送感。</li>
+                                <li>尾句放松延长，收在江水余韵里。</li>
+                            </ul>
+                        </div>
+                        <div class="panel-card soft">
+                            <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;">
+                                <div class="panel-kicker">本次练习反馈</div>
+                                <span class="soft-pill">AI 已生成</span>
+                            </div>
+                            <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:16px;margin-top:12px;">
+                                <div>
+                                    <div class="score-number serif">89</div>
+                                    <div class="score-note">整体完成度平稳、清朗</div>
+                                </div>
+                                <div class="score-orb"></div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-grid">
+                <div>
+                    <p class="section-eyebrow">PLATFORM ARCHITECTURE</p>
+                    <h2 class="section-title serif">让教师与学习者自然地走完一条朗读路径</h2>
+                    <p class="section-desc">界面不再强调工具感，而是像一间布置得体的书房，陪伴用户从选材、理解、练习到反馈，循序渐进地进入文本。</p>
+                </div>
+                <div class="soft-card-grid">
+                    <article class="soft-card">
+                        <div class="soft-card-index">01</div>
+                        <h3 class="soft-card-title serif">选材书架</h3>
+                        <p class="soft-card-desc">以主题、体裁、课堂适配度组织文本，帮助教师快速备课，也帮助学习者找到适合自己的作品。</p>
+                    </article>
+                    <article class="soft-card">
+                        <div class="soft-card-index">02</div>
+                        <h3 class="soft-card-title serif">太白辅导</h3>
+                        <p class="soft-card-desc">AI 不作为抢眼的主角，而像一位温和的助教，在恰当时刻给出解释、朗读建议与课堂启发。</p>
+                    </article>
+                    <article class="soft-card">
+                        <div class="soft-card-index">03</div>
+                        <h3 class="soft-card-title serif">练习评测</h3>
+                        <p class="soft-card-desc">评分与纠错以温和层级呈现，强调启发式反馈，而非压迫感强的“机器判定”。</p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" id="materials">
+            <div class="materials-head">
+                <div>
+                    <p class="section-eyebrow">CURATED MATERIALS</p>
+                    <h2 class="section-title serif">臻选序列库</h2>
+                    <p class="section-desc">保留古典诗词的静气，也补足现代诗和散文的教学场景。让选材本身就成为审美训练的一部分。</p>
+                </div>
+                <div class="filters" id="filters">
+                    <button class="filter-btn active" data-filter="all">全部</button>
+                    <button class="filter-btn" data-filter="poetry">古诗词</button>
+                    <button class="filter-btn" data-filter="modern">现代诗</button>
+                    <button class="filter-btn" data-filter="prose">散文</button>
+                </div>
+            </div>
+
+            <div class="materials-grid" id="materialsGrid">
+                <article class="material-card" data-category="poetry">
+                    <div class="material-top">
+                        <span class="level-pill">入门</span>
+                        <span class="author">李白</span>
+                    </div>
+                    <h3 class="material-title serif">静夜思</h3>
+                    <p class="material-excerpt">床前明月光，疑是地上霜。举头望明月，低头思故乡。</p>
+                    <div class="material-tip">
+                        <div class="material-tip-title">朗读要点</div>
+                        <div class="material-tip-text">适合训练轻声起句与尾音收束，重点感受“举头”与“低头”的动作对照。</div>
+                    </div>
+                    <a href="#" class="material-link">进入练习页 →</a>
+                </article>
+
+                <article class="material-card" data-category="poetry">
+                    <div class="material-top">
+                        <span class="level-pill">进阶</span>
+                        <span class="author">李白</span>
+                    </div>
+                    <h3 class="material-title serif">早发白帝城</h3>
+                    <p class="material-excerpt">朝辞白帝彩云间，千里江陵一日还。两岸猿声啼不住，轻舟已过万重山。</p>
+                    <div class="material-tip">
+                        <div class="material-tip-title">朗读要点</div>
+                        <div class="material-tip-text">适合练习明快节奏与开阔气息，尤其适合教师示范“速度感”的表达。</div>
+                    </div>
+                    <a href="#" class="material-link">进入练习页 →</a>
+                </article>
+
+                <article class="material-card" data-category="modern">
+                    <div class="material-top">
+                        <span class="level-pill">进阶</span>
+                        <span class="author">戴望舒</span>
+                    </div>
+                    <h3 class="material-title serif">雨巷</h3>
+                    <p class="material-excerpt">撑着油纸伞，独自彷徨在悠长、悠长又寂寥的雨巷。</p>
+                    <div class="material-tip">
+                        <div class="material-tip-title">朗读要点</div>
+                        <div class="material-tip-text">适合训练现代诗的呼吸层次与情绪绵延感，建议以偏慢语速进入。</div>
+                    </div>
+                    <a href="#" class="material-link">进入练习页 →</a>
+                </article>
+
+                <article class="material-card" data-category="prose">
+                    <div class="material-top">
+                        <span class="level-pill">课堂适用</span>
+                        <span class="author">朱自清</span>
+                    </div>
+                    <h3 class="material-title serif">匆匆</h3>
+                    <p class="material-excerpt">燕子去了，有再来的时候；杨柳枯了，有再青的时候。</p>
+                    <div class="material-tip">
+                        <div class="material-tip-title">朗读要点</div>
+                        <div class="material-tip-text">适合课堂朗读示范，训练散文中的节奏组织与情感递进。</div>
+                    </div>
+                    <a href="#" class="material-link">进入练习页 →</a>
+                </article>
+            </div>
+        </section>
+        <section class="section" id="assistant">
+            <div class="assistant-layout">
+                <article class="assistant-info">
+                    <p class="section-eyebrow">TAIBAI ASSISTANT</p>
+                    <h2 class="assistant-title serif">像一位懂文学、懂课堂、也懂表达的安静助教。</h2>
+                    <p class="assistant-desc">它能帮助教师组织课堂启发问题，也能帮助学习者理解文本、感受语气与节奏。AI 的存在被淡化成一种温和陪伴，而非主导性的“技术展示”。</p>
+                    <div class="assistant-list">
+                        <div class="assistant-item"><span class="assistant-dot"></span>推荐适合当前学段与课堂气氛的作品</div>
+                        <div class="assistant-item"><span class="assistant-dot"></span>给出朗读停连、语调与情感推进建议</div>
+                        <div class="assistant-item"><span class="assistant-dot"></span>生成可用于课堂导入的赏析问题</div>
+                        <div class="assistant-item"><span class="assistant-dot"></span>将评测结果转化成可执行的练习计划</div>
+                    </div>
+                </article>
+
+                <article class="assistant-chat">
+                    <div class="chat-top">
+                        <div>
+                            <h3 class="chat-name serif">太白智能体</h3>
+                            <div class="chat-role">课堂问答 · 朗读指导 · 文本赏析</div>
+                        </div>
+                        <span class="status-pill">在线</span>
+                    </div>
+                    <div class="chat-messages">
+                        <div class="bubble user">我下周要给八年级上一节送别诗朗读课，想从《黄鹤楼送孟浩然之广陵》切入，怎样让学生先进入情境？</div>
+                        <div class="bubble assistant">可以先不急着解释诗句，而从“看着朋友渐渐远去”这个经验出发。让学生先闭眼听江水、风声与船影，再进入“孤帆远影碧空尽”的视觉想象。若你愿意，我还可以继续为你生成一个 5 分钟课堂导入流程。</div>
+                    </div>
+                    <div class="chat-composer">
+                        <input class="chat-input" value="输入你的教学问题或朗读困惑..." readonly>
+                        <button class="chat-send">发送</button>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <section class="section" id="analysis">
+            <div class="analysis-layout">
+                <div>
+                    <p class="section-eyebrow">GENTLE ANALYTICS</p>
+                    <h2 class="section-title serif">朗读评测，以温和的方式呈现专业反馈</h2>
+                    <p class="section-desc">评价不再像冰冷打分，而是像一份整理有序的课堂观察记录。AI 的存在通过柔和光晕、淡雅色阶与结构化信息被悄然暗示。</p>
+                    <div class="scores-grid">
+                        <article class="score-card">
+                            <div class="score-card-head"><div><div class="score-label">吐字清晰</div><div class="score-value serif">91</div></div><div class="score-glow"></div></div>
+                            <div class="score-bar"><div class="score-fill" style="width:91%"></div></div>
+                            <div class="score-card-note">字头清楚，收音温润</div>
+                        </article>
+                        <article class="score-card">
+                            <div class="score-card-head"><div><div class="score-label">节奏层次</div><div class="score-value serif">86</div></div><div class="score-glow"></div></div>
+                            <div class="score-bar"><div class="score-fill" style="width:86%"></div></div>
+                            <div class="score-card-note">停连自然，段落感稳定</div>
+                        </article>
+                        <article class="score-card">
+                            <div class="score-card-head"><div><div class="score-label">语调变化</div><div class="score-value serif">82</div></div><div class="score-glow"></div></div>
+                            <div class="score-bar"><div class="score-fill" style="width:82%"></div></div>
+                            <div class="score-card-note">抒情句仍可更有起伏</div>
+                        </article>
+                        <article class="score-card">
+                            <div class="score-card-head"><div><div class="score-label">情感投入</div><div class="score-value serif">89</div></div><div class="score-glow"></div></div>
+                            <div class="score-bar"><div class="score-fill" style="width:89%"></div></div>
+                            <div class="score-card-note">整体表达克制而有分寸</div>
+                        </article>
+                    </div>
+                </div>
+
+                <article class="feedback-sheet">
+                    <p class="section-eyebrow" style="margin-bottom:0;">FEEDBACK SHEET</p>
+                    <h3 class="soft-card-title serif" style="margin-top:12px;">《再别康桥》练习记录</h3>
+                    <div class="feedback-block">
+                        <p class="feedback-text">你的整体声音状态稳定，轻柔句表现自然，适合抒情性文本。后半段个别长句略显平，建议在“悄悄是别离的笙箫”处加强语调起伏。</p>
+                    </div>
+                    <div class="feedback-list">
+                        <div class="feedback-item"><div class="feedback-index">1</div><div><div class="feedback-item-title">建议一</div><div class="feedback-item-desc">在关键词“轻轻”“悄悄”处保留更明显的气息差异。</div></div></div>
+                        <div class="feedback-item"><div class="feedback-index">2</div><div><div class="feedback-item-title">建议二</div><div class="feedback-item-desc">长句之间略作停顿，让画面感和呼吸感被听见。</div></div></div>
+                        <div class="feedback-item"><div class="feedback-index">3</div><div><div class="feedback-item-title">建议三</div><div class="feedback-item-desc">收尾时不要急于下落，可延长尾音，保留余韵。</div></div></div>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <section class="section" id="atlas">
+            <div class="atlas-layout">
+                <div>
+                    <p class="section-eyebrow">CULTURAL ATLAS</p>
+                    <h2 class="section-title serif">文化地图册</h2>
+                    <p class="section-desc">将诗词学习从书页延展到地理脉络之中。不是浓烈炫技的地图可视化，而是像一张雅致的案头文脉图。</p>
+                    <div class="stats-grid">
+                        <article class="stat-card"><p class="stat-value serif">34</p><div class="stat-label">覆盖省份</div></article>
+                        <article class="stat-card"><p class="stat-value serif">2800+</p><div class="stat-label">诗词源流</div></article>
+                        <article class="stat-card"><p class="stat-value serif">14</p><div class="stat-label">重点朝代</div></article>
+                    </div>
+                </div>
+
+                <article class="atlas-panel">
+                    <div class="atlas-canvas">
+                        <div class="atlas-outline"></div>
+                        <div class="atlas-outline-two"></div>
+                        <div class="map-point" style="left:62%; top:38%;"><div class="map-dot-wrap"><div class="map-dot-glow"></div><div class="map-dot"></div></div><div class="map-label"><div class="map-label-city">宣城</div><div>独坐敬亭山</div></div></div>
+                        <div class="map-point" style="left:67%; top:48%;"><div class="map-dot-wrap"><div class="map-dot-glow"></div><div class="map-dot"></div></div><div class="map-label"><div class="map-label-city">九江</div><div>望庐山瀑布</div></div></div>
+                        <div class="map-point" style="left:60%; top:53%;"><div class="map-dot-wrap"><div class="map-dot-glow"></div><div class="map-dot"></div></div><div class="map-label"><div class="map-label-city">武汉</div><div>黄鹤楼送孟浩然之广陵</div></div></div>
+                        <div class="map-point" style="left:47%; top:55%;"><div class="map-dot-wrap"><div class="map-dot-glow"></div><div class="map-dot"></div></div><div class="map-label"><div class="map-label-city">奉节</div><div>早发白帝城</div></div></div>
+                    </div>
+                </article>
+            </div>
+        </section>
+        <section class="closing-section">
+            <div class="closing-card">
+                <p class="section-eyebrow">A QUIET PLACE FOR READING</p>
+                <h2 class="closing-title serif">让技术藏在温度之后，<br>让朗读回到人的感受之中。</h2>
+                <p class="closing-desc">整体界面以暖白纸感、低饱和自然色与舒展留白建立氛围，既适合教师长期使用，也能让学习者在反复练习中始终保持放松、沉浸与审美愉悦。</p>
+                <div class="closing-actions">
+                    <button class="cta-primary">作为首页方案使用</button>
+                    <button class="cta-secondary">继续拆分子页面</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        (function () {
+            var filterBar = document.getElementById('filters');
+            var cards = Array.prototype.slice.call(document.querySelectorAll('.material-card'));
+            if (!filterBar) return;
+
+            filterBar.addEventListener('click', function (event) {
+                var target = event.target;
+                if (!(target instanceof HTMLElement) || !target.classList.contains('filter-btn')) return;
+                var value = target.getAttribute('data-filter');
+
+                document.querySelectorAll('.filter-btn').forEach(function (button) {
+                    button.classList.remove('active');
+                });
+                target.classList.add('active');
+
+                cards.forEach(function (card) {
+                    var category = card.getAttribute('data-category');
+                    card.style.display = value === 'all' || category === value ? 'block' : 'none';
+                });
+            });
+        })();
+    </script>
+</body>
+</html>
