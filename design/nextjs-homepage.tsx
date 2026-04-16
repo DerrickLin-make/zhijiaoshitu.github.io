@@ -157,7 +157,7 @@ export default function PoetryPlatformRedesign() {
               <NavLink>资料库</NavLink>
               <NavLink>智能助手</NavLink>
               <NavLink>朗读分析</NavLink>
-              <NavLink>文化地图</NavLink>
+              <NavLink>诗旅地图</NavLink>
             </nav>
             <button className="rounded-full border border-[#D7C7B7] bg-white/70 px-5 py-2 text-sm text-[#6F6256] shadow-[0_8px_24px_rgba(110,88,62,0.06)] transition hover:border-[#B79D7D] hover:text-[#8E7356]">
               进入书房
@@ -493,7 +493,7 @@ export default function PoetryPlatformRedesign() {
             <div>
               <SectionTitle
                 eyebrow="CULTURAL ATLAS"
-                title="文化地图册"
+                title="诗旅地图册"
                 description="将诗词学习从书页延展到地理脉络之中。不是浓烈炫技的地图可视化，而是像一张雅致的案头文脉图。"
               />
               <div className="mt-8 grid gap-4 sm:grid-cols-3">

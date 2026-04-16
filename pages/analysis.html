@@ -419,7 +419,7 @@
                 <a href="materials.html" class="nav-link">资料库</a>
                 <a href="chat.html" class="nav-link">智能助手</a>
                 <a href="analysis.html" class="nav-link active">朗读分析</a>
-                <a href="atlas.html" class="nav-link">文化地图</a>
+                <a href="atlas.html" class="nav-link">诗旅地图</a>
             </div>
             <div class="nav-toggle" id="navToggle">
                 <span></span>
@@ -539,7 +539,7 @@
                 <p class="footer-desc">分析页继续保留独立分页结构与上传流程，但从冷硬的“评分面板”改成更像观察记录的阅读式呈现。</p>
                 <div class="footer-actions">
                     <a href="materials.html" class="btn-primary">回到资料库</a>
-                    <a href="atlas.html" class="btn-secondary">查看文化地图</a>
+                    <a href="atlas.html" class="btn-secondary">查看诗旅地图</a>
                 </div>
             </div>
             <div class="footer-bottom">
@@ -874,7 +874,8 @@
             });
             await previewTranscoder.load({
                 coreURL: '../vendor/ffmpeg/ffmpeg-core.js',
-                wasmURL: '../vendor/ffmpeg/ffmpeg-core.wasm'
+                wasmURL: '../vendor/ffmpeg/ffmpeg-core.wasm',
+                classWorkerURL: '../vendor/ffmpeg/814.ffmpeg.js'
             });
             previewTranscoderLoaded = true;
             return previewTranscoder;
@@ -923,9 +924,10 @@
                 try { await ffmpeg.deleteFile(inputName); } catch (e) {}
                 try { await ffmpeg.deleteFile(outputName); } catch (e) {}
             } catch (error) {
+                console.error("Transcode Error: ", error);
                 if (jobId !== previewJobId || file !== currentFile) return;
                 videoPreviewStatus.classList.add('error');
-                videoPreviewStatus.textContent = '本地兼容预览生成失败：' + error.message;
+                videoPreviewStatus.textContent = '本地兼容预览生成失败：' + (error.message || JSON.stringify(error) || error);
                 if (currentFileUrl) {
                     setPreviewSource(currentFileUrl, 'original');
                 }

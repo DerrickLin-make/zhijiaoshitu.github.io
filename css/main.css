@@ -255,9 +255,6 @@ main {
     transform: translateY(-1px);
 }
 
-.section-border {
-    border-top: 1px solid var(--line);
-}
 
 .page-header {
     padding: 72px 0 56px;
