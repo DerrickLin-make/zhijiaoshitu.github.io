@@ -106,85 +106,191 @@
             display: flex;
             flex-direction: column;
             overflow: hidden;
-            background: rgba(255, 255, 255, 0.84);
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(248, 242, 233, 0.88));
         }
 
-        .assistant-panel-head {
+        .dify-chat-root,
+        .chat-panel {
+            display: flex;
+            flex: 1;
+            min-height: 0;
+            flex-direction: column;
+        }
+
+        .chat-panel__header {
             display: flex;
             align-items: center;
             justify-content: space-between;
             gap: 16px;
-            padding: 24px 24px 18px;
-            border-bottom: 1px solid #efe4d8;
+            padding: 22px 24px 18px;
+            border-bottom: 1px solid rgba(232, 222, 210, 0.7);
         }
 
-        .assistant-panel-title {
+        .chat-panel__eyebrow {
+            font-size: 11px;
+            letter-spacing: 0.28em;
+            color: var(--text-mute);
+        }
+
+        .chat-panel__title {
             margin: 0;
-            font-family: var(--font-serif);
-            font-size: 1.9rem;
-            font-weight: 500;
-        }
-
-        .assistant-panel-desc {
             margin-top: 6px;
-            font-size: 0.9rem;
-            color: var(--tea-deep);
-        }
-
-        .dify-frame {
-            width: 100%;
-            min-height: 660px;
-            border: none;
-            background: transparent;
-            display: none;
-        }
-
-        .dify-fallback {
-            display: none;
-            flex: 1;
-            align-items: center;
-            justify-content: center;
-            padding: 36px 24px;
-        }
-
-        .fallback-card {
-            max-width: 520px;
-            text-align: center;
-            border: 1px solid var(--line);
-            border-radius: 28px;
-            background: rgba(255, 253, 249, 0.95);
-            padding: 28px;
-            box-shadow: var(--shadow-sm);
-        }
-
-        .fallback-icon {
-            width: 74px;
-            height: 74px;
-            margin: 0 auto 18px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: #f5efe6;
-            color: var(--tea-deep);
-            font-size: 1.8rem;
-        }
-
-        .fallback-title {
-            margin: 0;
             font-family: var(--font-serif);
-            font-size: 2rem;
+            font-size: 1.65rem;
             font-weight: 500;
         }
 
-        .fallback-copy {
-            margin-top: 14px;
+        .chat-panel__desc {
+            margin-top: 6px;
+            font-size: 12px;
+            color: var(--text-mute);
+        }
+
+        .chat-panel__reset {
+            border: 1px solid #d7c7b7;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.82);
+            color: #6f6256;
+            padding: 10px 16px;
+            font-size: 13px;
+            transition: border-color var(--transition), color var(--transition), transform var(--transition);
+        }
+
+        .chat-panel__reset:hover {
+            border-color: var(--tea);
+            color: var(--tea-deep);
+            transform: translateY(-1px);
+        }
+
+        .chat-panel__messages {
+            flex: 1;
+            min-height: 0;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            padding: 24px;
+            background:
+                radial-gradient(circle at top right, rgba(175, 192, 200, 0.1), transparent 22%),
+                linear-gradient(180deg, rgba(255, 255, 255, 0.52), rgba(250, 247, 241, 0.38));
+        }
+
+        .chat-system-message {
+            align-self: center;
+            max-width: min(100%, 520px);
+            border-radius: 999px;
+            padding: 10px 14px;
+            background: rgba(245, 239, 230, 0.84);
             color: var(--text-soft);
-            line-height: 2;
+            font-size: 13px;
+            text-align: center;
+        }
+
+        .chat-system-message--error {
+            background: rgba(191, 122, 78, 0.12);
+            color: #8a5a39;
+        }
+
+        .chat-message {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            max-width: min(84%, 680px);
+        }
+
+        .chat-message--user {
+            align-self: flex-end;
+            align-items: flex-end;
+        }
+
+        .chat-message--assistant {
+            align-self: flex-start;
+            align-items: flex-start;
+        }
+
+        .chat-message__meta {
+            font-size: 12px;
+            color: var(--text-mute);
+        }
+
+        .chat-message__body {
+            margin: 0;
+            padding: 14px 16px;
+            border-radius: 20px;
+            line-height: 1.9;
+            font-size: 14px;
+            color: #5f5348;
+            background: rgba(255, 255, 255, 0.92);
+            border: 1px solid rgba(232, 222, 210, 0.82);
+            box-shadow: 0 10px 26px rgba(110, 88, 62, 0.05);
+        }
+
+        .chat-message--user .chat-message__body {
+            color: #fffdf9;
+            background: linear-gradient(135deg, var(--tea-deep), #a18463);
+            border-color: transparent;
+            box-shadow: 0 12px 24px rgba(142, 115, 86, 0.16);
+        }
+
+        .chat-message__body--muted {
+            color: var(--text-soft);
+        }
+
+        .chat-panel__composer {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 14px;
+            padding: 18px 20px 20px;
+            border-top: 1px solid rgba(232, 222, 210, 0.72);
+            background: rgba(255, 253, 249, 0.88);
+        }
+
+        .chat-panel__composer textarea {
+            width: 100%;
+            min-height: 56px;
+            max-height: 180px;
+            resize: none;
+            border: 1px solid #ddd1c5;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            color: var(--text);
+            padding: 16px 18px;
+            outline: none;
+            line-height: 1.7;
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8);
+            transition: border-color var(--transition), box-shadow var(--transition);
+            overflow-y: hidden;
+        }
+
+        .chat-panel__composer textarea:focus {
+            border-color: rgba(142, 115, 86, 0.45);
+            box-shadow: 0 0 0 4px rgba(183, 157, 125, 0.12);
+        }
+
+        .chat-panel__composer button {
+            align-self: end;
+            height: 56px;
+            padding: 0 22px;
+            border-radius: 18px;
+            background: var(--tea-deep);
+            color: #fffdf9;
+            box-shadow: 0 14px 24px rgba(142, 115, 86, 0.16);
+            transition: background-color var(--transition), transform var(--transition), opacity var(--transition);
+        }
+
+        .chat-panel__composer button:hover:not(:disabled) {
+            background: var(--tea-deeper);
+            transform: translateY(-1px);
+        }
+
+        .chat-panel__composer button:disabled,
+        .chat-panel__composer textarea:disabled {
+            opacity: 0.68;
+            cursor: not-allowed;
         }
 
         @media (max-width: 980px) {
-            .chat-layout {
+            .chat-panel__composer {
                 grid-template-columns: 1fr;
             }
         }
@@ -238,30 +344,7 @@
                 <div class="hero-panel-wrap">
                     <div class="hero-glow"></div>
                     <section class="assistant-panel hero-panel" style="padding:0;display:flex;flex-direction:column;height:680px;background:rgba(255,255,255,0.85);">
-                        <div style="padding:22px 24px;border-bottom:1px solid rgba(232,222,210,0.6);display:flex;justify-content:space-between;align-items:center;">
-                            <div>
-                                <h2 style="margin:0;font-family:var(--font-serif);font-size:1.6rem;font-weight:500;">与太白对话</h2>
-                                <div style="font-size:12px;color:var(--text-mute);margin-top:4px;">课堂问答 · 朗读指导 · 文本赏析</div>
-                            </div>
-                            <span class="pill pill-soft">在线响应</span>
-                        </div>
-                        <iframe
-
-                    id="difyFrame"
-                    class="dify-frame"
-                    allow="microphone">
-                </iframe>
-
-                <div id="difyFallback" class="dify-fallback">
-                    <div class="fallback-card">
-                        <div class="fallback-icon">💬</div>
-                        <h3 class="fallback-title">本地预览限制</h3>
-                        <p class="fallback-copy">由于浏览器安全策略，本地 <code>file://</code> 协议下无法直接嵌入聊天窗口。你仍然可以通过下方按钮打开太白智能体，继续体验完整对话。</p>
-                        <div style="margin-top:20px;">
-                            <a href="https://udify.app/chatbot/GKi5Ug3tl6r9rhen" target="_blank" rel="noopener noreferrer" class="btn-primary">打开太白智能体</a>
-                        </div>
-                    </div>
-                </div>
+                        <div id="difyChatApp" class="dify-chat-root"></div>
                     </section>
                 </div>
             </div>
@@ -290,6 +373,8 @@
         </div>
     </footer>
 
+    <script src="../js/dify-config.local.js"></script>
+    <script src="../js/dify-chat.js"></script>
     <script>
         window.addEventListener('scroll', function () {
             var navbar = document.getElementById('navbar');
@@ -300,17 +385,6 @@
         document.getElementById('navToggle').addEventListener('click', function () {
             document.getElementById('navMenu').classList.toggle('open');
         });
-
-        (function () {
-            var frame = document.getElementById('difyFrame');
-            var fallback = document.getElementById('difyFallback');
-            if (window.location.protocol === 'file:') {
-                fallback.style.display = 'flex';
-            } else {
-                frame.src = 'https://udify.app/chatbot/GKi5Ug3tl6r9rhen';
-                frame.style.display = 'block';
-            }
-        })();
     </script>
 </body>
 </html>

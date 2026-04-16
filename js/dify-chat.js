@@ -23,7 +23,7 @@
         }
 
         bindEvents();
-        renderSystemMessage('太白已接入新的 Dify 应用，你可以直接开始对话。');
+        renderSystemMessage('太白已准备好，你可以直接开始提问。');
     }
 
     function renderShell(root) {
@@ -31,8 +31,9 @@
             <div class="chat-panel">
                 <div class="chat-panel__header">
                     <div>
-                        <div class="chat-panel__eyebrow">Dify Connected</div>
+                        <div class="chat-panel__eyebrow">DIFY CONNECTED</div>
                         <h1 class="chat-panel__title">太白智能体</h1>
+                        <div class="chat-panel__desc">课堂问答 · 朗读指导 · 文本赏析</div>
                     </div>
                     <button class="chat-panel__reset" id="chatResetButton" type="button">新建对话</button>
                 </div>
@@ -111,7 +112,7 @@
             renderMessage('assistant', data.answer || '已收到请求，但没有返回文本内容。');
         } catch (error) {
             removeMessage(loadingId);
-            renderSystemMessage('Dify 请求失败：' + error.message, true);
+            renderSystemMessage('请求失败：' + error.message, true);
         } finally {
             state.isSending = false;
             setComposerDisabled(false);
@@ -188,6 +189,11 @@
         }
         input.style.height = 'auto';
         input.style.height = Math.min(input.scrollHeight, 180) + 'px';
+        if (input.scrollHeight > 180) {
+            input.style.overflowY = 'auto';
+        } else {
+            input.style.overflowY = 'hidden';
+        }
     }
 
     function normalizeBaseUrl(url) {
