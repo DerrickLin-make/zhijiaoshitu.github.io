@@ -17,7 +17,7 @@
         renderShell(root);
 
         if (!config.baseUrl || !config.apiKey) {
-            renderSystemMessage('未检测到 Dify 配置，请在 js/dify-config.local.js 中填写 baseUrl 和 apiKey。', true);
+            renderSystemMessage('未检测到 Dify 配置，请检查 js/dify-config.js 是否已正确加载。', true);
             setComposerDisabled(true);
             return;
         }
