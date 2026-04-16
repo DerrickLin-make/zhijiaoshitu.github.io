@@ -110,6 +110,7 @@
 
         .upload-progress,
         .file-info,
+        .video-local-preview,
         .analyzing-state,
         .result-section {
             display: none;
@@ -171,6 +172,53 @@
             display: flex;
             gap: 10px;
             flex-wrap: wrap;
+        }
+
+        .video-local-preview {
+            margin-top: 18px;
+            padding: 14px;
+            border: 1px solid var(--line-soft);
+            border-radius: 22px;
+            background: rgba(255,255,255,0.78);
+            box-shadow: 0 12px 24px rgba(110, 88, 62, 0.04);
+        }
+
+        .video-local-label {
+            margin: 0 0 12px;
+            font-size: 0.9rem;
+            color: var(--text-soft);
+        }
+
+        .video-local-stage {
+            width: 100%;
+            overflow: hidden;
+            border-radius: 18px;
+            background: #1d1915;
+            aspect-ratio: var(--video-ratio, 16 / 9);
+            box-shadow: 0 10px 24px rgba(110, 88, 62, 0.12);
+        }
+
+        .video-local-player {
+            width: 100%;
+            height: 100%;
+            display: block;
+            background: #1d1915;
+            object-fit: contain;
+        }
+
+        .video-local-status {
+            margin-top: 12px;
+            padding: 12px 14px;
+            border-radius: 16px;
+            font-size: 0.9rem;
+            line-height: 1.8;
+            color: var(--text-soft);
+            background: rgba(245, 239, 230, 0.72);
+        }
+
+        .video-local-status.error {
+            color: #8a5a39;
+            background: rgba(191, 122, 78, 0.12);
         }
 
         .analyzing-state {
@@ -442,6 +490,14 @@
                                     </div>
                                 </div>
                             </div>
+
+                            <div class="video-local-preview" id="videoPreviewWrap">
+                                <p class="video-local-label">本地视频预览</p>
+                                <div class="video-local-stage" id="videoPreviewStage">
+                                    <video id="videoPreview" class="video-local-player" controls playsinline preload="metadata"></video>
+                                </div>
+                                <div class="video-local-status" id="videoPreviewStatus">视频已加载，可以直接点击播放。</div>
+                            </div>
                         </div>
                     </section>
                 </div>
@@ -497,6 +553,7 @@
         </div>
     </footer>
 
+    <script src="../vendor/ffmpeg/ffmpeg.js"></script>
     <script>
         window.addEventListener('scroll', function () {
             var navbar = document.getElementById('navbar');
@@ -509,8 +566,21 @@
         });
 
         var currentFile = null;
+        var currentFileUrl = '';
         var uploadArea = document.getElementById('uploadArea');
         var fileInput = document.getElementById('fileInput');
+        var videoPreview = document.getElementById('videoPreview');
+        var videoPreviewStage = document.getElementById('videoPreviewStage');
+        var videoPreviewWrap = document.getElementById('videoPreviewWrap');
+        var videoPreviewStatus = document.getElementById('videoPreviewStatus');
+        var previewFrameReported = false;
+        var previewDiagnosticsTimer = null;
+        var previewTranscodedUrl = '';
+        var previewCodecHint = '';
+        var previewJobId = 0;
+        var previewTranscoding = false;
+        var previewTranscoder = null;
+        var previewTranscoderLoaded = false;
 
         uploadArea.addEventListener('click', function () {
             fileInput.click();
@@ -546,9 +616,11 @@
                 return;
             }
             currentFile = file;
+            previewJobId += 1;
             document.getElementById('fileName').textContent = file.name;
             document.getElementById('fileSize').textContent = formatSize(file.size);
             document.getElementById('fileInfo').style.display = 'block';
+            renderVideoPreview(file);
             simulateUpload();
         }
 
@@ -586,6 +658,7 @@
             document.getElementById('uploadProgress').style.display = 'none';
             document.getElementById('resultSection').style.display = 'none';
             document.getElementById('analyzingState').style.display = 'none';
+            clearVideoPreview();
         }
 
         function startAnalysis() {
@@ -660,6 +733,205 @@
         function analyzeAnother() {
             removeFile();
             window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function renderVideoPreview(file) {
+            clearVideoPreview(false);
+            currentFileUrl = URL.createObjectURL(file);
+            videoPreviewStatus.classList.remove('error');
+            videoPreviewStatus.textContent = '正在加载本地视频预览...';
+            videoPreviewStage.style.setProperty('--video-ratio', '16 / 9');
+            previewFrameReported = false;
+            videoPreviewWrap.style.display = 'block';
+            detectPreviewCodec(file).then(function (codec) {
+                if (file !== currentFile) return;
+                previewCodecHint = codec;
+                if (codec === 'hevc' || codec === 'av1') {
+                    var codecLabel = codec === 'hevc' ? 'HEVC / H.265' : 'AV1';
+                    videoPreviewStatus.textContent = '检测到该视频使用 ' + codecLabel + ' 编码，当前浏览器本地预览兼容性较差，正在生成兼容预览...';
+                    transcodePreviewForCompatibility(file, codecLabel);
+                    return;
+                }
+                setPreviewSource(currentFileUrl, 'original');
+            }).catch(function () {
+                if (file !== currentFile) return;
+                setPreviewSource(currentFileUrl, 'original');
+            });
+        }
+
+        function clearVideoPreview(shouldRevoke) {
+            if (previewDiagnosticsTimer) {
+                clearTimeout(previewDiagnosticsTimer);
+                previewDiagnosticsTimer = null;
+            }
+            if (shouldRevoke !== false && currentFileUrl) {
+                URL.revokeObjectURL(currentFileUrl);
+            }
+            if (previewTranscodedUrl) {
+                URL.revokeObjectURL(previewTranscodedUrl);
+            }
+            currentFileUrl = '';
+            previewTranscodedUrl = '';
+            previewCodecHint = '';
+            previewTranscoding = false;
+            videoPreview.pause();
+            videoPreview.removeAttribute('src');
+            videoPreview.load();
+            videoPreviewWrap.style.display = 'none';
+            videoPreviewStatus.classList.remove('error');
+            videoPreviewStatus.textContent = '视频已加载，可以直接点击播放。';
+            videoPreviewStage.style.setProperty('--video-ratio', '16 / 9');
+            previewFrameReported = false;
+            videoPreview.dataset.mode = '';
+        }
+
+        videoPreview.addEventListener('loadedmetadata', function () {
+            if (videoPreview.videoWidth && videoPreview.videoHeight) {
+                videoPreviewStage.style.setProperty('--video-ratio', videoPreview.videoWidth + ' / ' + videoPreview.videoHeight);
+                if (videoPreview.dataset.mode === 'transcoded') {
+                    videoPreviewStatus.textContent = '已生成兼容预览，可以正常播放。分辨率：' + videoPreview.videoWidth + ' × ' + videoPreview.videoHeight;
+                } else {
+                    videoPreviewStatus.textContent = '视频已加载，可以直接点击播放。分辨率：' + videoPreview.videoWidth + ' × ' + videoPreview.videoHeight;
+                }
+            } else {
+                videoPreviewStatus.textContent = '视频元数据已加载，但没有读取到有效画面尺寸。';
+            }
+            videoPreviewStatus.classList.remove('error');
+        });
+
+        videoPreview.addEventListener('playing', function () {
+            if (previewDiagnosticsTimer) {
+                clearTimeout(previewDiagnosticsTimer);
+            }
+            previewDiagnosticsTimer = setTimeout(function () {
+                if (!previewFrameReported && !videoPreview.paused && videoPreview.currentTime > 0.2) {
+                    if (!previewTranscoding && currentFile) {
+                        var hintLabel = previewCodecHint === 'hevc' ? 'HEVC / H.265' : (previewCodecHint === 'av1' ? 'AV1' : '当前视频');
+                        videoPreviewStatus.classList.remove('error');
+                        videoPreviewStatus.textContent = '检测到播放器只有声音、没有画面，正在把 ' + hintLabel + ' 转成兼容预览格式...';
+                        transcodePreviewForCompatibility(currentFile, hintLabel);
+                    } else {
+                        videoPreviewStatus.classList.add('error');
+                        videoPreviewStatus.textContent = '播放器已经开始走时并有声音，但页面仍未收到可渲染的视频帧。';
+                    }
+                }
+            }, 1500);
+
+            if ('requestVideoFrameCallback' in HTMLVideoElement.prototype) {
+                videoPreview.requestVideoFrameCallback(function () {
+                    previewFrameReported = true;
+                    if (!videoPreview.paused) {
+                        videoPreviewStatus.classList.remove('error');
+                        videoPreviewStatus.textContent = '画面已正常渲染。';
+                    }
+                });
+            }
+        });
+
+        videoPreview.addEventListener('error', function () {
+            var code = videoPreview.error ? videoPreview.error.code : 0;
+            var reason = '浏览器暂时无法解码这个视频文件。';
+            if (code === 1) reason = '视频加载被中断。';
+            if (code === 2) reason = '读取视频数据时发生网络或文件错误。';
+            if (code === 3) reason = '视频解码失败，通常是文件损坏或编码异常。';
+            if (code === 4) reason = '当前浏览器不支持这个视频的编码格式。';
+            if (!previewTranscoding && currentFile) {
+                videoPreviewStatus.classList.remove('error');
+                videoPreviewStatus.textContent = reason + ' 正在尝试生成兼容预览...';
+                transcodePreviewForCompatibility(currentFile, previewCodecHint || '当前视频');
+            } else {
+                videoPreviewStatus.classList.add('error');
+                videoPreviewStatus.textContent = reason;
+            }
+        });
+
+        function setPreviewSource(url, mode) {
+            videoPreview.dataset.mode = mode;
+            videoPreview.src = url;
+            videoPreview.load();
+        }
+
+        async function detectPreviewCodec(file) {
+            var probeBuffer = await file.slice(0, Math.min(file.size, 2 * 1024 * 1024)).arrayBuffer();
+            var probeText = new TextDecoder('latin1').decode(probeBuffer);
+            if (probeText.indexOf('hvc1') !== -1 || probeText.indexOf('hev1') !== -1) return 'hevc';
+            if (probeText.indexOf('av01') !== -1) return 'av1';
+            if (probeText.indexOf('avc1') !== -1 || probeText.indexOf('avc3') !== -1) return 'h264';
+            if (probeText.indexOf('vp09') !== -1) return 'vp9';
+            return '';
+        }
+
+        async function ensurePreviewTranscoder() {
+            if (previewTranscoderLoaded && previewTranscoder) return previewTranscoder;
+            if (!window.FFmpegWASM || !window.FFmpegWASM.FFmpeg) {
+                throw new Error('未找到浏览器端转码组件');
+            }
+            previewTranscoder = new window.FFmpegWASM.FFmpeg();
+            previewTranscoder.on('progress', function (event) {
+                if (!previewTranscoding) return;
+                var pct = Math.max(0, Math.min(100, Math.round((event.progress || 0) * 100)));
+                videoPreviewStatus.textContent = '正在生成兼容预览... ' + pct + '%';
+            });
+            await previewTranscoder.load({
+                coreURL: '../vendor/ffmpeg/ffmpeg-core.js',
+                wasmURL: '../vendor/ffmpeg/ffmpeg-core.wasm'
+            });
+            previewTranscoderLoaded = true;
+            return previewTranscoder;
+        }
+
+        async function transcodePreviewForCompatibility(file, codecLabel) {
+            if (!file || previewTranscoding) return;
+            previewTranscoding = true;
+            var jobId = previewJobId;
+            var inputName = 'preview-input-' + jobId + '.mp4';
+            var outputName = 'preview-output-' + jobId + '.mp4';
+
+            try {
+                videoPreview.pause();
+                videoPreview.removeAttribute('src');
+                videoPreview.load();
+                videoPreview.dataset.mode = 'transcoding';
+                videoPreviewStatus.classList.remove('error');
+                videoPreviewStatus.textContent = '正在加载转码引擎并生成兼容预览...';
+
+                var ffmpeg = await ensurePreviewTranscoder();
+                if (jobId !== previewJobId || file !== currentFile) return;
+
+                await ffmpeg.writeFile(inputName, new Uint8Array(await file.arrayBuffer()));
+                await ffmpeg.exec([
+                    '-i', inputName,
+                    '-c:v', 'libx264',
+                    '-preset', 'ultrafast',
+                    '-pix_fmt', 'yuv420p',
+                    '-c:a', 'aac',
+                    '-movflags', '+faststart',
+                    outputName
+                ]);
+
+                if (jobId !== previewJobId || file !== currentFile) return;
+
+                var data = await ffmpeg.readFile(outputName);
+                if (previewTranscodedUrl) {
+                    URL.revokeObjectURL(previewTranscodedUrl);
+                }
+                previewTranscodedUrl = URL.createObjectURL(new Blob([data], { type: 'video/mp4' }));
+                videoPreviewStatus.classList.remove('error');
+                videoPreviewStatus.textContent = codecLabel + ' 兼容预览已生成，正在载入画面...';
+                setPreviewSource(previewTranscodedUrl, 'transcoded');
+
+                try { await ffmpeg.deleteFile(inputName); } catch (e) {}
+                try { await ffmpeg.deleteFile(outputName); } catch (e) {}
+            } catch (error) {
+                if (jobId !== previewJobId || file !== currentFile) return;
+                videoPreviewStatus.classList.add('error');
+                videoPreviewStatus.textContent = '本地兼容预览生成失败：' + error.message;
+                if (currentFileUrl) {
+                    setPreviewSource(currentFileUrl, 'original');
+                }
+            } finally {
+                previewTranscoding = false;
+            }
         }
     </script>
 </body>
