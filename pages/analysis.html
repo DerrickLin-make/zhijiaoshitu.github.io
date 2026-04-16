@@ -873,9 +873,8 @@
                 videoPreviewStatus.textContent = '正在生成兼容预览... ' + pct + '%';
             });
             await previewTranscoder.load({
-                coreURL: '../vendor/ffmpeg/ffmpeg-core.js',
-                wasmURL: '../vendor/ffmpeg/ffmpeg-core.wasm',
-                classWorkerURL: '../vendor/ffmpeg/814.ffmpeg.js'
+                coreURL: new URL('../vendor/ffmpeg/ffmpeg-core.js', window.location.href).href,
+                wasmURL: new URL('../vendor/ffmpeg/ffmpeg-core.wasm', window.location.href).href
             });
             previewTranscoderLoaded = true;
             return previewTranscoder;
